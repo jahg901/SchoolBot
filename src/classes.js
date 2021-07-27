@@ -22,3 +22,9 @@ class Assignment {
         this.info = arr[3];
     }
 }
+
+module.exports = {
+    Course : Course,
+    Server : Server,
+    Assignment : Assignment
+}
