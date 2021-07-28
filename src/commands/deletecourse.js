@@ -10,11 +10,17 @@ const reactionFilter = (authorID) => {
     });
 }
 
+let deleteInProgress = false;
+
 const DeleteCourse = new Command(".deleteCourse ", "remove a course", ["course"], (msg, server, args) => {
     const crs = Funcs.findCourse(server, args.course);
     if (crs === null) {
         msg.channel.send(new Discord.MessageEmbed().setDescription(`The course "${args.course}" does not exist.`));
+    } else if (deleteInProgress) {
+        msg.channel.send(new Discord.MessageEmbed().setTitle("There can only be one active course deletion request at once.")
+            .setDescription("Please wait until there is no active request to delete a course."));
     } else {
+        deleteInProgress = true;
         msg.channel.send(new Discord.MessageEmbed().setTitle(`Are you sure you want to delete the course "${args.course}"?`)
             .setDescription("React with 🗑️ to confirm, or ❌ to cancel.")).then(sentMsg => {
                 sentMsg.react("🗑️");
@@ -22,6 +28,7 @@ const DeleteCourse = new Command(".deleteCourse ", "remove a course", ["course"]
                 sentMsg.awaitReactions(reactionFilter(msg.author.id), { max: 1, time: 60000, errors: ["time"] }).then(reaction => {
                     reaction = Array.from(reaction.values())[0]._emoji.name;
                     sentMsg.reactions.removeAll();
+                    deleteInProgress = false;
                     if (reaction === "🗑️") {
                         for (let i = 0; i < server.courses.length; i++) {
                             if (server.courses[i].name === crs.name) {
@@ -35,6 +42,7 @@ const DeleteCourse = new Command(".deleteCourse ", "remove a course", ["course"]
                     }
                 }).catch(() => {
                     sentMsg.reactions.removeAll();
+                    deleteInProgress = false;
                     sentMsg.edit(new Discord.MessageEmbed().setDescription("Confirmation timed out; course deletion cancelled."));
                 });
             });
