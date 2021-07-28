@@ -12,15 +12,13 @@ const sendEmbed = (msg, pageNum, crs) => {
     const e = new Discord.MessageEmbed().setTitle(crs.name)
         .setDescription(crs.studentArr.length + " Student" + Funcs.pluralize(crs.studentArr.length));
     for (let i = pageNum * 10; i < crs.studentArr.length && i < (pageNum + 1) * 10; i++) {
-        msg.guild.members.fetch(crs.studentArr[i]).then(student => {
-            if (student.nickname === null) {
-                e.addField(student.user.tag, "\u200B");
-            } else {
-                e.addField(student.nickname, student.user.tag);
-            }
-        });
+        let student = msg.guild.members.cache.get(crs.studentArr[i])
+        if (student.nickname === null) {
+            e.addField(student.user.tag, "\u200B");
+        } else {
+            e.addField(student.nickname, student.user.tag);
+        }
     }
-    //this is tricky
     msg.edit(e).then(sentMsg => {
         if (pageNum > 0) sentMsg.react("⬅️");
         if (crs.studentArr.length > (pageNum + 1) * 10) sentMsg.react("➡️");
@@ -46,6 +44,7 @@ const CourseStudentList = new Command(".studentList ", "list the students in a c
     } else if (crs.studentArr.length === 0) {
         msg.channel.send(new Discord.MessageEmbed().setDescription(`The course ${args.course} has no students.`));
     } else {
+        msg.guild.members.fetch();
         msg.channel.send(new Discord.MessageEmbed().setDescription("Loading...")).then(sentMsg => {
             sendEmbed(sentMsg, 0, crs);
         });
