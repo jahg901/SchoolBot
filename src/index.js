@@ -11,6 +11,7 @@ const FullCourseList = require("./commands/fullcourselist.js");
 const JoinCourse = require("./commands/joincourse.js");
 const LeaveCourse = require("./commands/leavecourse.js");
 const DeleteCourse = require("./commands/deletecourse.js");
+const MyCourseList = require("./commands/mycourselist.js");
 
 client.on("ready", () => {
     console.log(`Logged in as ${client.user.tag}`);
@@ -26,6 +27,7 @@ client.on("message", msg => {
     JoinCourse.execute(msg, servers[msg.guild.id]);
     LeaveCourse.execute(msg, servers[msg.guild.id]);
     DeleteCourse.execute(msg, servers[msg.guild.id]);
+    MyCourseList.execute(msg, servers[msg.guild.id]);
 
 });
 
