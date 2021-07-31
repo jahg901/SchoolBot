@@ -42,9 +42,12 @@ function pluralize(value) {
     }
 }
 
+let deleteInProgress = false;
+
 module.exports = {
     findCourse,
     checkDate,
     dateFormat,
-    pluralize
+    pluralize,
+    deleteInProgress
 }

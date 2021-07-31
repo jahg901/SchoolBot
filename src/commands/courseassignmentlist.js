@@ -12,7 +12,7 @@ const sendEmbed = (msg, pageNum, crs) => {
     const e = new Discord.MessageEmbed().setTitle(crs.name)
         .setDescription(crs.assignments.length + " Assignment" + Funcs.pluralize(crs.assignments.length));
     for (let i = pageNum * 10; i < crs.assignments.length && i < (pageNum + 1) * 10; i++) {
-        e.addField(crs.assignments[i].name, "Due " + Funcs.dateFormat.format(crs.assignments[i].dueDate));
+        e.addField(`${i + 1}. ${crs.assignments[i].name}`, `Due ${Funcs.dateFormat.format(crs.assignments[i].dueDate)}`);
     }
     msg.edit(e).then(sentMsg => {
         if (pageNum > 0) sentMsg.react("⬅️");

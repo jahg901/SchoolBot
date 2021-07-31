@@ -30,7 +30,7 @@ const NewAssignment = new Command(".newAssignment\n",
         if (e.message === "Too many arguments" || e.message === "Too few arguments") {
             msg.channel.send(new Discord.MessageEmbed()
                 .setDescription("Invalid input. Please format your command in the following manner:" +
-                    "\n.newAssignment\n<assignment name>\n<course>\n<due date (yyyy/mm/dd)>\n<additional info>"));
+                    "\n\n.newAssignment\n<assignment name>\n<course>\n<due date (yyyy/mm/dd)>\n<additional info>"));
         } else if (e.message.startsWith("Invalid course")) {
             msg.channel.send(new Discord.MessageEmbed().setDescription(`The course "${e.message.substring("Invalid course".length)}" does not exist.`));
         } else if (e.message === "Invalid date") {
