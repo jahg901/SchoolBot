@@ -7,14 +7,24 @@ const Funcs = require("../functions.js");
 const LeaveCourse = new Command(".leave ", "leave a course", ["course"], (msg, server, args) => {
     const crs = Funcs.findCourse(server, args.course);
     if (crs === null) {
-        msg.channel.send(new Discord.MessageEmbed().setDescription(`The course "${args.course}" does not exist.`));
+        throw new Error("Invalid course" + args.course);
     } else if (crs.students[msg.author.id] !== true) {
-        msg.channel.send(new Discord.MessageEmbed().setDescription(`You are not enrolled in ${args.course}.`));
+        throw new Error("Not enrolled");
     } else {
         delete crs.students[msg.author.id];
         crs.studentArr.splice(crs.studentArr.indexOf(msg.author.id), 1);
         msg.channel.send(new Discord.MessageEmbed().setTitle(`You have now left ${args.course}!`));
     }
-}, (msg, e) => { console.log(e) });
+}, (msg, e) => {
+    if (e.message.startsWith("Invalid course")) {
+        msg.channel.send(new Discord.MessageEmbed().setDescription(`The course "${e.message.substring("Invalid course".length)}" does not exist.`));
+    } else if (e.message === "Not enrolled") {
+        msg.channel.send(new Discord.MessageEmbed().setDescription(`You are not enrolled in this course.`));
+    } else if (e.message === "Backslash") {
+        msg.channel.send(new Discord.MessageEmbed().setDescription(`No input can include the character "\\\\".`));
+    } else {
+        console.log(e);
+    }
+});
 
 module.exports = LeaveCourse;

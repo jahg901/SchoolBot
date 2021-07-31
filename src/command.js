@@ -1,4 +1,7 @@
 function parseArgs(content, params, splitter) { //interprets a user's command and outputs a JSON of arguments
+    if (content.includes("\\")) {
+        throw new Error("Backslash");
+    }
     let args = content.split(splitter);
     if (args[0] === "") {
         args.splice(0, 1);
@@ -22,7 +25,7 @@ function parseArgs(content, params, splitter) { //interprets a user's command an
     }
     argJSON += "}";
 
-    return JSON.parse(argJSON);
+    return JSON.parse(argJSON.replace(/\n/g, "\\n"));
 }
 
 class Command { //framework for discord commands

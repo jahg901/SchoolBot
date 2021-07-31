@@ -34,12 +34,18 @@ const sendEmbed = (msg, pageNum, courses) => {
 
 const FullCourseList = new Command(".fullCourseList", "lists all courses", [], (msg, server, args) => {
     if (server.courses.length === 0) {
-        msg.channel.send(new Discord.MessageEmbed().setDescription("No courses currently exist."));
+        throw new Error("No courses");
     } else {
         msg.channel.send(new Discord.MessageEmbed().setDescription("Loading...")).then(sentMsg => {
             sendEmbed(sentMsg, 0, server.courses);
         });
     }
-}, (msg, e) => { console.log(e) });
+}, (msg, e) => {
+    if (e.message === "No courses") {
+        msg.channel.send(new Discord.MessageEmbed().setDescription("No courses currently exist."));
+    } else {
+        console.log(e);
+    }
+});
 
 module.exports = FullCourseList;

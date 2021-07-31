@@ -40,15 +40,25 @@ const sendEmbed = (msg, pageNum, crs) => {
 const CourseStudentList = new Command(".studentList ", "list the students in a course", ["course"], (msg, server, args) => {
     const crs = Funcs.findCourse(server, args.course);
     if (crs === null) {
-        msg.channel.send(new Discord.MessageEmbed().setDescription(`The course "${args.course}" does not exist.`));
+        throw new Error("Invalid course" + args.course);
     } else if (crs.studentArr.length === 0) {
-        msg.channel.send(new Discord.MessageEmbed().setDescription(`The course ${args.course} has no students.`));
+        throw new Error("No students" + args.course);
     } else {
         msg.guild.members.fetch();
         msg.channel.send(new Discord.MessageEmbed().setDescription("Loading...")).then(sentMsg => {
             sendEmbed(sentMsg, 0, crs);
         });
     }
-}, (msg, e) => { console.log(e) });
+}, (msg, e) => {
+    if (e.message.startsWith("Invalid course")) {
+        msg.channel.send(new Discord.MessageEmbed().setDescription(`The course "${e.message.substring("Invalid course".length)}" does not exist.`));
+    } else if (e.message.startsWith("No students")) {
+        msg.channel.send(new Discord.MessageEmbed().setDescription(`The course ${e.message.substring("No students".length)} has no students.`));
+    } else if (e.message === "Backslash") {
+        msg.channel.send(new Discord.MessageEmbed().setDescription(`No input can include the character "\\\\".`));
+    } else {
+        console.log(e);
+    }
+});
 
 module.exports = CourseStudentList;

@@ -15,16 +15,16 @@ class Server {
 }
 
 class Assignment {
-    constructor(arr) {
-        this.name = arr[0];
-        this.course = arr[1];
-        this.dueDate = arr[2];
-        this.info = arr[3];
+    constructor(Name, Course, DueDate, Info) {
+        this.name = Name;
+        this.course = Course;
+        this.dueDate = DueDate;
+        this.info = Info;
     }
 }
 
 module.exports = {
-    Course : Course,
-    Server : Server,
-    Assignment : Assignment
+    Course: Course,
+    Server: Server,
+    Assignment: Assignment
 }

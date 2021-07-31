@@ -15,10 +15,9 @@ let deleteInProgress = false;
 const DeleteCourse = new Command(".deleteCourse ", "remove a course", ["course"], (msg, server, args) => {
     const crs = Funcs.findCourse(server, args.course);
     if (crs === null) {
-        msg.channel.send(new Discord.MessageEmbed().setDescription(`The course "${args.course}" does not exist.`));
+        throw new Error("Invalid course" + args.course);
     } else if (deleteInProgress) {
-        msg.channel.send(new Discord.MessageEmbed().setTitle("There can only be one active course deletion request at once.")
-            .setDescription("Please wait until there is no active request to delete a course."));
+        throw new Error("Active request");
     } else {
         deleteInProgress = true;
         msg.channel.send(new Discord.MessageEmbed().setTitle(`Are you sure you want to delete the course "${args.course}"?`)
@@ -47,6 +46,17 @@ const DeleteCourse = new Command(".deleteCourse ", "remove a course", ["course"]
                 });
             });
     }
-}, (msg, e) => { console.log(e) });
+}, (msg, e) => {
+    if (e.message.startsWith("Invalid course")) {
+        msg.channel.send(new Discord.MessageEmbed().setDescription(`The course "${e.message.substring("Invalid course".length)}" does not exist.`));
+    } else if (e.message === "Active request") {
+        msg.channel.send(new Discord.MessageEmbed().setTitle("There can only be one active course deletion request at once.")
+            .setDescription("Please wait until there is no active request to delete a course."));
+    } else if (e.message === "Backslash") {
+        msg.channel.send(new Discord.MessageEmbed().setDescription(`No input can include the character "\\\\".`));
+    } else {
+        console.log(e);
+    }
+});
 
 module.exports = DeleteCourse;

@@ -43,12 +43,18 @@ const MyCourseList = new Command(".myCourseList", "lists all courses", [], (msg,
         }
     }
     if (myCourses.length === 0) {
-        msg.channel.send(new Discord.MessageEmbed().setDescription("You are not enrolled in any courses."));
+        throw new Error("No courses");
     } else {
         msg.channel.send(new Discord.MessageEmbed().setDescription("Loading...")).then(sentMsg => {
             sendEmbed(msg.member, sentMsg, 0, myCourses);
         });
     }
-}, (msg, e) => { console.log(e) });
+}, (msg, e) => {
+    if (e.message === "No courses") {
+        msg.channel.send(new Discord.MessageEmbed().setDescription("You are not enrolled in any courses."));
+    } else {
+        console.log(e);
+    }
+});
 
 module.exports = MyCourseList;
