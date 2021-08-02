@@ -52,6 +52,8 @@ const MyCourseList = new Command(".myCourseList", "lists all courses", [], (msg,
 }, (msg, e) => {
     if (e.message === "No courses") {
         msg.channel.send(new Discord.MessageEmbed().setDescription("You are not enrolled in any courses."));
+    } else if (e.message === "Too many arguments") {
+        msg.channel.send(new Discord.MessageEmbed().setDescription(`Invalid input: the command ".fullCourseList" takes no arguments.`))
     } else {
         console.log(e);
     }

@@ -17,6 +17,8 @@ const NewAssignment = require("./commands/newassignment.js");
 const CourseAssignmentList = require("./commands/courseassignmentlist.js");
 const DeleteAssignment = require("./commands/deleteassignment.js");
 const ViewAssignment = require("./commands/viewassignment.js");
+const EditAssignment = require("./commands/editassignment.js");
+const MyAssignmentList = require("./commands/myassignmentlist.js");
 
 client.on("ready", () => {
     console.log(`Logged in as ${client.user.tag}`);
@@ -38,6 +40,8 @@ client.on("message", msg => {
     CourseAssignmentList.execute(msg, servers[msg.guild.id]);
     DeleteAssignment.execute(msg, servers[msg.guild.id]);
     ViewAssignment.execute(msg, servers[msg.guild.id]);
+    EditAssignment.execute(msg, servers[msg.guild.id]);
+    MyAssignmentList.execute(msg, servers[msg.guild.id]);
 
 });
 
