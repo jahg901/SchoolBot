@@ -37,7 +37,6 @@ const Help = new Command(".help", "", [], (msg, server, args) => {
 }, (msg, e) => { console.log(e) });
 
 client.on("ready", () => {
-
     console.log(`Logged in as ${client.user.tag}`);
     servers = DataHandler.ReadData()
     console.log(`Loaded data into servers object:`);
@@ -47,7 +46,6 @@ client.on("ready", () => {
 client.on("message", msg => {
     if (!(msg.guild.id in servers)) {
         servers[msg.guild.id] = new Classes.Server(msg.guild.id);
-        console.log("duhhhh im stoopid");
     }
     if (msg.content.startsWith(".")) {
         for (c of commands) {
@@ -60,9 +58,11 @@ client.on("message", msg => {
 
 process.on("SIGINT", () => {
     console.log("\n");
-    console.log(servers);
-    DataHandler.SaveData(servers);
     process.exit();
+});
+
+process.on("exit", () => {
+    DataHandler.SaveData(servers);
 });
 
 client.login(token);
