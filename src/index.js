@@ -4,21 +4,23 @@ const Classes = require("./classes.js");
 
 const token = process.env.DISCORD_TOKEN;
 const client = new Discord.Client();
-const servers = {};
 
-const NewCourse = require("./commands/newcourse.js");
-const FullCourseList = require("./commands/fullcourselist.js");
-const JoinCourse = require("./commands/joincourse.js");
-const LeaveCourse = require("./commands/leavecourse.js");
-const DeleteCourse = require("./commands/deletecourse.js");
-const MyCourseList = require("./commands/mycourselist.js");
-const CourseStudentList = require("./commands/coursestudentlist.js");
-const NewAssignment = require("./commands/newassignment.js");
-const CourseAssignmentList = require("./commands/courseassignmentlist.js");
-const DeleteAssignment = require("./commands/deleteassignment.js");
-const ViewAssignment = require("./commands/viewassignment.js");
-const EditAssignment = require("./commands/editassignment.js");
-const MyAssignmentList = require("./commands/myassignmentlist.js");
+const servers = {};
+const commands = [];
+
+commands.push(require("./commands/newcourse.js"));
+commands.push(require("./commands/fullcourselist.js"));
+commands.push(require("./commands/joincourse.js"));
+commands.push(require("./commands/leavecourse.js"));
+commands.push(require("./commands/deletecourse.js"));
+commands.push(require("./commands/mycourselist.js"));
+commands.push(require("./commands/coursestudentlist.js"));
+commands.push(require("./commands/newassignment.js"));
+commands.push(require("./commands/courseassignmentlist.js"));
+commands.push(require("./commands/deleteassignment.js"));
+commands.push(require("./commands/viewassignment.js"));
+commands.push(require("./commands/editassignment.js"));
+commands.push(require("./commands/myassignmentlist.js"));
 
 client.on("ready", () => {
     console.log(`Logged in as ${client.user.tag}`);
@@ -29,20 +31,11 @@ client.on("message", msg => {
         servers[msg.guild.id] = new Classes.Server(msg.guild.id);
     }
 
-    NewCourse.execute(msg, servers[msg.guild.id]);
-    FullCourseList.execute(msg, servers[msg.guild.id]);
-    JoinCourse.execute(msg, servers[msg.guild.id]);
-    LeaveCourse.execute(msg, servers[msg.guild.id]);
-    DeleteCourse.execute(msg, servers[msg.guild.id]);
-    MyCourseList.execute(msg, servers[msg.guild.id]);
-    CourseStudentList.execute(msg, servers[msg.guild.id]);
-    NewAssignment.execute(msg, servers[msg.guild.id]);
-    CourseAssignmentList.execute(msg, servers[msg.guild.id]);
-    DeleteAssignment.execute(msg, servers[msg.guild.id]);
-    ViewAssignment.execute(msg, servers[msg.guild.id]);
-    EditAssignment.execute(msg, servers[msg.guild.id]);
-    MyAssignmentList.execute(msg, servers[msg.guild.id]);
-
+    if (msg.content.startsWith(".")) {
+        for (c of commands) {
+            c.execute(msg, servers[msg.guild.id]);
+        }
+    }
 });
 
 client.login(token);
