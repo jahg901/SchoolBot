@@ -2,11 +2,12 @@ require("dotenv").config();
 const Discord = require("discord.js");
 const Classes = require("./classes.js");
 const Command = require("./command.js");
+const DataHandler = require("./datahandler.js")
 
 const token = process.env.DISCORD_TOKEN;
 const client = new Discord.Client();
 
-const servers = {};
+let servers;
 const commands = [];
 
 commands.push(require("./commands/newcourse.js"));
@@ -36,19 +37,32 @@ const Help = new Command(".help", "", [], (msg, server, args) => {
 }, (msg, e) => { console.log(e) });
 
 client.on("ready", () => {
+
     console.log(`Logged in as ${client.user.tag}`);
+    servers = DataHandler.ReadData()
+    console.log(`Loaded data into servers object:`);
+    console.log(servers);
 });
 
 client.on("message", msg => {
-    if (!(servers[msg.guild.id] instanceof Classes.Server)) {
+    if (!(msg.guild.id in servers)) {
         servers[msg.guild.id] = new Classes.Server(msg.guild.id);
+        console.log("duhhhh im stoopid");
     }
     if (msg.content.startsWith(".")) {
         for (c of commands) {
             c.execute(msg, servers[msg.guild.id]);
         }
         Help.execute(msg, servers[msg.guild.id]);
+
     }
+});
+
+process.on("SIGINT", () => {
+    console.log("\n");
+    console.log(servers);
+    DataHandler.SaveData(servers);
+    process.exit();
 });
 
 client.login(token);

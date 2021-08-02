@@ -1,9 +1,6 @@
 const Classes = require("./classes.js");
 
 function findCourse(s, c) {
-    if (!(s instanceof Classes.Server)) {
-        return null;
-    }
     for (let i = 0; i < s.courses.length; i++) {
         if (s.courses[i].name === c) {
             return s.courses[i];
