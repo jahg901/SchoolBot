@@ -18,11 +18,10 @@ const NewAssignment = new Command(".newAssignment\n",
                 throw new Error("Invalid date");
             } else {
                 crs.assignments.push(args);
-                msg.channel.send(new Discord.MessageEmbed().setTitle("New assignment created!").setDescription(args.name)
+                msg.channel.send(new Discord.MessageEmbed().setTitle("New assignment created! " + args.name).setDescription(args.info)
                     .addFields(
                         { name: 'Course: ', value: args.course, inline: true },
                         { name: 'Due Date: ', value: Funcs.dateFormat.format(args.dueDate), inline: true },
-                        { name: '\u200B', value: args.info },
                     ));
             }
         }

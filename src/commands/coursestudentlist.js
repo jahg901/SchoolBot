@@ -10,13 +10,14 @@ const reactionFilter = (reaction, user) => {
 
 const sendEmbed = (msg, pageNum, crs) => {
     const e = new Discord.MessageEmbed().setTitle(crs.name)
-        .setDescription(crs.studentArr.length + " Student" + Funcs.pluralize(crs.studentArr.length));
+        .setDescription(crs.studentArr.length + " Student" + Funcs.pluralize(crs.studentArr.length))
+        .addField("\u200B", "\u0000");
     for (let i = pageNum * 10; i < crs.studentArr.length && i < (pageNum + 1) * 10; i++) {
         let student = msg.guild.members.cache.get(crs.studentArr[i])
         if (student.nickname === null) {
-            e.addField(student.user.tag, "\u200B");
+            e.fields[0].value += `**${student.user.username}**#${student.user.discriminator}\n`;
         } else {
-            e.addField(student.nickname, student.user.tag);
+            e.fields[0].value += `**${student.nickname}** (${student.user.tag})\n`;
         }
     }
     msg.edit(e).then(sentMsg => {
