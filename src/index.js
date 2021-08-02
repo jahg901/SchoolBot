@@ -2,14 +2,15 @@ require("dotenv").config();
 const Discord = require("discord.js");
 const Classes = require("./classes.js");
 const Command = require("./command.js");
-const DataHandler = require("./datahandler.js")
+const DataHandler = require("./datahandler.js");
+const fs = require("fs");
 
 const token = process.env.DISCORD_TOKEN;
 const client = new Discord.Client();
 
 let servers;
 const commands = [];
-
+/* 
 commands.push(require("./commands/newcourse.js"));
 commands.push(require("./commands/fullcourselist.js"));
 commands.push(require("./commands/joincourse.js"));
@@ -23,6 +24,13 @@ commands.push(require("./commands/deleteassignment.js"));
 commands.push(require("./commands/viewassignment.js"));
 commands.push(require("./commands/editassignment.js"));
 commands.push(require("./commands/myassignmentlist.js"));
+commands.push(require("./commands/editcoursename"));
+ */
+fs.promises.readdir("./src/commands").then(files => {
+    for (f of files) {
+        commands.push(require("./commands/" + f));
+    }
+});
 
 const Help = new Command(".help", "", [], (msg, server, args) => {
     const e = new Discord.MessageEmbed()
