@@ -29,6 +29,9 @@ const DeleteCourse = new Command(".deleteCourse ", "remove a course", ["course"]
                     if (reaction === "🗑️") {
                         for (let i = 0; i < server.courses.length; i++) {
                             if (server.courses[i].name === crs.name) {
+                                for (a of crs.assignments) {
+                                    a.notify.cancel();
+                                }
                                 server.courses.splice(i, 1);
                                 break;
                             }

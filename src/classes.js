@@ -1,3 +1,5 @@
+const AssignmentNotify = require("./assignmentnotify.js");
+
 class Course {
     constructor(Name) {
         this.name = Name;
@@ -15,11 +17,17 @@ class Server {
 }
 
 class Assignment {
-    constructor(Name, Course, DueDate, Info) {
+    constructor(Name, Course, DueDate, Info, server, client) {
         this.name = Name;
         this.course = Course;
         this.dueDate = DueDate;
         this.info = Info;
+        this.notify = AssignmentNotify.newJob(this, server, client);
+    }
+
+    reschedule(server, client) {
+        this.notify.cancel();
+        this.notify = AssignmentNotify.newJob(this, server, client);
     }
 }
 

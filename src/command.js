@@ -33,10 +33,10 @@ class Command { //framework for discord commands
         this.name = name; //the string that triggers the command
         this.description = description; //a description of the command
         this.params = params; //an array of parameter names for commands that require arguments
-        this.execute = function (msg, server) { //run the execution function if a message triggers the command
+        this.execute = function (msg, server, client) { //run the execution function if a message triggers the command
             if (msg.content.startsWith(name)) {
                 try {
-                    execution(msg, server, parseArgs(msg.content.substring(name.length), params, splitter));
+                    execution(msg, server, parseArgs(msg.content.substring(name.length), params, splitter), client);
                 } catch (e) {
                     errorHandle(msg, e);
                 }

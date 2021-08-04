@@ -6,26 +6,11 @@ const DataHandler = require("./datahandler.js");
 const fs = require("fs");
 
 const token = process.env.DISCORD_TOKEN;
-const client = new Discord.Client();
 
-let servers;
+let client = new Discord.Client();
+
 const commands = [];
-/* 
-commands.push(require("./commands/newcourse.js"));
-commands.push(require("./commands/fullcourselist.js"));
-commands.push(require("./commands/joincourse.js"));
-commands.push(require("./commands/leavecourse.js"));
-commands.push(require("./commands/deletecourse.js"));
-commands.push(require("./commands/mycourselist.js"));
-commands.push(require("./commands/coursestudentlist.js"));
-commands.push(require("./commands/newassignment.js"));
-commands.push(require("./commands/courseassignmentlist.js"));
-commands.push(require("./commands/deleteassignment.js"));
-commands.push(require("./commands/viewassignment.js"));
-commands.push(require("./commands/editassignment.js"));
-commands.push(require("./commands/myassignmentlist.js"));
-commands.push(require("./commands/editcoursename"));
- */
+
 fs.promises.readdir("./src/commands").then(files => {
     for (f of files) {
         commands.push(require("./commands/" + f));
@@ -46,21 +31,20 @@ const Help = new Command(".help", "", [], (msg, server, args) => {
 
 client.on("ready", () => {
     console.log(`Logged in as ${client.user.tag}`);
-    servers = DataHandler.ReadData()
-    console.log(`Loaded data into servers object:`);
-    console.log(servers);
 });
 
 client.on("message", msg => {
-    if (!(msg.guild.id in servers)) {
-        servers[msg.guild.id] = new Classes.Server(msg.guild.id);
-    }
-    if (msg.content.startsWith(".")) {
-        for (c of commands) {
-            c.execute(msg, servers[msg.guild.id]);
+    if (msg.guild !== null) {
+        if (!(msg.guild.id in servers)) {
+            servers[msg.guild.id] = new Classes.Server(msg.guild.id);
         }
-        Help.execute(msg, servers[msg.guild.id]);
+        if (msg.content.startsWith(".")) {
+            for (c of commands) {
+                c.execute(msg, servers[msg.guild.id], client);
+            }
+            Help.execute(msg, servers[msg.guild.id]);
 
+        }
     }
 });
 
@@ -72,5 +56,18 @@ process.on("SIGINT", () => {
 process.on("exit", () => {
     DataHandler.SaveData(servers);
 });
+
+const servers = DataHandler.ReadData();
+console.log("Loaded data into servers object");
+
+for (s in servers) {
+    for (c of servers[s].courses) {
+        for (let i = 0; i < c.assignments.length; i++) {
+            c.assignments[i] = new Classes.Assignment(c.assignments[i].name, c.assignments[i].course,
+                new Date(c.assignments[i].dueDate), c.assignments[i].info, servers[s], client);
+        }
+    }
+}
+console.log("Activated all timers for assignment notification");
 
 client.login(token);

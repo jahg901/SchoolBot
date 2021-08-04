@@ -10,26 +10,46 @@ function findCourse(s, c) {
 }
 
 function checkDate(d) {
-    if (!/\d{4}[. '/,-]\d{2}[. '/,-]\d{2}/.test(d)
-        || d.length !== 10) {
-        return null;
-    } else {
-        d = d.split(/[. '/,-]/);
+    if (/\d{4}[. '/,-]\d{2}[. '/,-]\d{2}/.test(d) && d.length === 10) {
+
+        d = d.split(/[. '/,\-]/);
         for (let i = 0; i < 3; i++) {
             d[i] = parseInt(d[i]);
         }
-        let date = new Date(d[0], d[1] - 1, d[2]);
+        d[1] = d[1] - 1;
+        let date = new Date(...d);
         if (date.getUTCFullYear() !== d[0]
-            || date.getUTCMonth() !== d[1] - 1) {
+            || date.getUTCMonth() !== d[1]) {
             return null;
         } else {
             return date;
         }
+
+    } else if ((/\d{4}[. '/,-]\d{2}[. '/,-]\d{2} \d:\d{2}/.test(d) && d.length === 15)
+        || (/\d{4}[. '/,-]\d{2}[. '/,-]\d{2} \d{2}:\d{2}/.test(d) && d.length === 16)) {
+
+        d = d.split(/[. '/,\-:]/);
+        for (let i = 0; i < 5; i++) {
+            d[i] = parseInt(d[i]);
+        }
+        d[1] = d[1] - 1;
+        let date = new Date(...d);
+        if (date.getFullYear() !== d[0]
+            || date.getMonth() !== d[1]
+            || date.getDate() !== d[2]
+            || date.getHours() !== d[3]) {
+            return null;
+        } else {
+            return date;
+        }
+
+    } else {
+        return null;
     }
 }
 
 const dateFormat = new Intl.DateTimeFormat('en-US',
-    { year: 'numeric', month: 'long', day: 'numeric' });
+    { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' });
 
 function pluralize(value) {
     if (value === 1) {

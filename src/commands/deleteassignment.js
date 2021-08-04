@@ -43,6 +43,7 @@ const DeleteAssignment = new Command(".deleteAssignment\n", "remove an assignmen
                                 if (reaction === "🗑️") {
                                     for (let i = 0; i < crs.assignments.length; i++) {
                                         if (crs.assignments[i] === assignment) {
+                                            crs.assignments[i].notify.cancel();
                                             crs.assignments.splice(i, 1);
                                             break;
                                         }

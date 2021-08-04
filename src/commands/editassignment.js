@@ -4,7 +4,7 @@ const Classes = require("../classes.js");
 const Command = require("../command.js");
 const Funcs = require("../functions.js");
 
-const edit = (field, content, assignment) => {
+const edit = (field, content, assignment, server, client) => {
     switch (field) {
         case "name":
             assignment.name = content;
@@ -16,6 +16,7 @@ const edit = (field, content, assignment) => {
                 throw new Error("Invalid date");
             } else {
                 assignment.dueDate = content;
+                assignment.reschedule(server, client);
             }
             break;
 
@@ -30,7 +31,7 @@ const edit = (field, content, assignment) => {
 }
 
 const EditAssignment = new Command(".editAssignment\n", "edit an assignment's information, specifying the course, assignment index, field to edit and new content.",
-    ["course", "index", "field", "content"], (msg, server, args) => {
+    ["course", "index", "field", "content"], (msg, server, args, client) => {
         if (args.course === null || args.index === null) {
             throw new Error("Too few arguments");
         } else {
@@ -42,7 +43,7 @@ const EditAssignment = new Command(".editAssignment\n", "edit an assignment's in
                 if (!(args.index === args.index) || args.index < 1 || args.index > crs.assignments.length) {
                     throw new Error("Invalid index")
                 } else {
-                    const assignment = edit(args.field, args.content, crs.assignments[args.index - 1]);
+                    const assignment = edit(args.field, args.content, crs.assignments[args.index - 1], server, client);
                     msg.channel.send(new Discord.MessageEmbed().setTitle("Assignment edited! " + assignment.name)
                         .setDescription(assignment.info)
                         .addFields(

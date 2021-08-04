@@ -6,7 +6,7 @@ const Funcs = require("../functions.js");
 
 const NewAssignment = new Command(".newAssignment\n",
     "create a new assignment in an existing course, specifying due date and additional information",
-    ["name", "course", "dueDate", "info"], (msg, server, args) => {
+    ["name", "course", "dueDate", "info"], (msg, server, args, client) => {
         if (args.name === null || args.course === null || args.dueDate === null || args.info === null) {
             throw new Error("Too few arguments");
         } else {
@@ -17,7 +17,7 @@ const NewAssignment = new Command(".newAssignment\n",
             } else if (args.dueDate === null) {
                 throw new Error("Invalid date");
             } else {
-                crs.assignments.push(args);
+                crs.assignments.push(new Classes.Assignment(args.name, args.course, args.dueDate, args.info, server, client));
                 msg.channel.send(new Discord.MessageEmbed().setTitle("New assignment created! " + args.name).setDescription(args.info)
                     .addFields(
                         { name: 'Course: ', value: args.course, inline: true },
