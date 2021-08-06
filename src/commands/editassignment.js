@@ -14,6 +14,8 @@ const edit = (field, content, assignment, server, client) => {
             content = Funcs.checkDate(content);
             if (content === null) {
                 throw new Error("Invalid date");
+            } else if (content.getTime() <= Date.now()) {
+                throw new Error("Date in past");
             } else {
                 assignment.dueDate = content;
                 assignment.reschedule(server, client);
@@ -67,6 +69,8 @@ const EditAssignment = new Command(".editAssignment\n", "edit an assignment's in
                 + `valid number corresponding to an assignment in your specified course.`));
         } else if (e.message === "Invalid date") {
             msg.channel.send(new Discord.MessageEmbed().setDescription("Invalid date. Please provide a valid date in yyyy/mm/dd format."));
+        } else if (e.message === "Date in past") {
+            msg.channel.send(new Discord.MessageEmbed().setDescription("The provided due date is in the past. Please provide a due date in the future."));
         } else if (e.message === "Invalid field") {
             msg.channel.send(new Discord.MessageEmbed().setDescription(`Invalid field to edit. The field to edit should be either "name", "duedate", or "info".`))
         } else if (e.messgae === "Backslash") {

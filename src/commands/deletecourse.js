@@ -30,7 +30,11 @@ const DeleteCourse = new Command(".deleteCourse ", "remove a course", ["course"]
                         for (let i = 0; i < server.courses.length; i++) {
                             if (server.courses[i].name === crs.name) {
                                 for (a of crs.assignments) {
-                                    a.notify.cancel();
+                                    for (j of a.notify()) {
+                                        try {
+                                            a.cancel();
+                                        } catch (e) { };
+                                    }
                                 }
                                 server.courses.splice(i, 1);
                                 break;

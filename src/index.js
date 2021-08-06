@@ -63,8 +63,13 @@ console.log("Loaded data into servers object");
 for (s in servers) {
     for (c of servers[s].courses) {
         for (let i = 0; i < c.assignments.length; i++) {
-            c.assignments[i] = new Classes.Assignment(c.assignments[i].name, c.assignments[i].course,
-                new Date(c.assignments[i].dueDate), c.assignments[i].info, servers[s], client);
+            if ((new Date(c.assignments[i].dueDate)).getTime() > Date.now()) {
+                c.assignments[i] = new Classes.Assignment(c.assignments[i].name, c.assignments[i].course,
+                    new Date(c.assignments[i].dueDate), c.assignments[i].info, servers[s], client);
+            } else {
+                c.assignments.splice(i, 1);
+                i--;
+            }
         }
     }
 }
