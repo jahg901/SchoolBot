@@ -10,7 +10,7 @@ const reactionFilter = (authorID) => {
     });
 }
 
-const DeleteAssignment = new Command(".deleteAssignment\n", "remove an assignment from a course, specifying the course and assignment index",
+const DeleteAssignment = new Command(".deleteAssignment\n", "remove an assignment from a course, specifying the course and assignment index", true,
     ["course", "index"], (msg, server, args) => {
         if (args.course === null || args.index === null) {
             throw new Error("Too few arguments");

@@ -32,7 +32,7 @@ const sendEmbed = (msg, pageNum, courses) => {
     });
 }
 
-const FullCourseList = new Command(".fullCourseList", "lists all courses", [], (msg, server, args) => {
+const FullCourseList = new Command(".fullCourseList", "lists all courses", false, [], (msg, server, args) => {
     if (server.courses.length === 0) {
         throw new Error("No courses");
     } else {

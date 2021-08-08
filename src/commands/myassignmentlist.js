@@ -34,7 +34,7 @@ const sendEmbed = (msg, pageNum, myAssignments) => {
     });
 }
 
-const MyAssignmentList = new Command(".myAssignmentList", "list the assignments in all courses you are enrolled in", [], (msg, server, args) => {
+const MyAssignmentList = new Command(".myAssignmentList", "list the assignments in all courses you are enrolled in", false, [], (msg, server, args) => {
     const myAssignments = [];
     for (c of server.courses) {
         if (c.students[msg.author.id] === true) {

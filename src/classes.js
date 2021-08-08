@@ -13,6 +13,7 @@ class Server {
     constructor(ID) {
         this.id = ID;
         this.courses = [];
+        this.modRole = null;
     }
 }
 

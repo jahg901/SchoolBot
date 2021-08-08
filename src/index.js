@@ -3,6 +3,7 @@ const Discord = require("discord.js");
 const Classes = require("./classes.js");
 const Command = require("./command.js");
 const DataHandler = require("./datahandler.js");
+const WelcomeMessage = require("./welcomemessage");
 const fs = require("fs");
 
 const token = process.env.DISCORD_TOKEN;
@@ -17,13 +18,19 @@ fs.promises.readdir("./src/commands").then(files => {
     }
 });
 
-const Help = new Command(".help", "", [], (msg, server, args) => {
+const Help = new Command(".help", "", false, [], (msg, server, args) => {
     const e = new Discord.MessageEmbed()
         .setTitle(`${client.user.username} Commands`);
-    for (c of commands) {
-        e.addField(c.name, c.description);
-        if (c.params.length !== 0) {
-            e.fields[e.fields.length - 1].name += ` <${c.params}>`;
+    for (let i = 0; i < commands.length; i++) {
+        e.addField(commands[i].name, commands[i].description);
+        if (e.fields[i].name.endsWith(" ") || e.fields[i].name.endsWith("\n")) {
+            e.fields[i].name = e.fields[i].name.substring(0, e.fields[i].name.length - 1);
+        }
+        if (commands[i].params.length !== 0) {
+            e.fields[i].name += ` *<${commands[i].params}>*`;
+        }
+        if (commands[i].mod) {
+            e.fields[i].name += `\n[Mod Command]`;
         }
     }
     msg.channel.send(e);
@@ -31,6 +38,14 @@ const Help = new Command(".help", "", [], (msg, server, args) => {
 
 client.on("ready", () => {
     console.log(`Logged in as ${client.user.tag}`);
+});
+
+client.on("guildCreate", guild => {
+    guild.channels.cache.map(channel => {
+        if (channel.type === "text" && channel.permissionsFor(client.user).has("VIEW_CHANNEL", "SEND_MESSAGES")) {
+            channel.send(WelcomeMessage);
+        }
+    })
 });
 
 client.on("message", msg => {

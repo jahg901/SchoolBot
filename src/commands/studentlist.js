@@ -10,20 +10,26 @@ const reactionFilter = (reaction, user) => {
 
 const sendEmbed = (msg, pageNum, crs) => {
     const e = new Discord.MessageEmbed().setTitle(crs.name)
-        .setDescription(crs.assignments.length + " Assignment" + Funcs.pluralize(crs.assignments.length));
-    for (let i = pageNum * 10; i < crs.assignments.length && i < (pageNum + 1) * 10; i++) {
-        e.addField(`${i + 1}. ${crs.assignments[i].name}`, `Due ${Funcs.dateFormat.format(crs.assignments[i].dueDate)}`);
+        .setDescription(crs.studentArr.length + " Student" + Funcs.pluralize(crs.studentArr.length))
+        .addField("\u200B", "\u0000");
+    for (let i = pageNum * 10; i < crs.studentArr.length && i < (pageNum + 1) * 10; i++) {
+        let student = msg.guild.members.cache.get(crs.studentArr[i])
+        if (student.nickname === null) {
+            e.fields[0].value += `**${student.user.username}**#${student.user.discriminator}\n`;
+        } else {
+            e.fields[0].value += `**${student.nickname}** (${student.user.tag})\n`;
+        }
     }
     msg.edit(e).then(sentMsg => {
         if (pageNum > 0) sentMsg.react("⬅️");
-        if (crs.assignments.length > (pageNum + 1) * 10) sentMsg.react("➡️");
-        if (crs.assignments.length > 10) {
+        if (crs.studentArr.length > (pageNum + 1) * 10) sentMsg.react("➡️");
+        if (crs.studentArr.length > 10) {
             sentMsg.awaitReactions(reactionFilter, { max: 1, time: 60000, errors: ["time"] }).then(reaction => {
                 reaction = Array.from(reaction.values())[0]._emoji.name;
                 if (pageNum > 0 && reaction === "⬅️") {
                     sentMsg.reactions.removeAll();
                     sendEmbed(sentMsg, pageNum - 1, crs);
-                } else if (crs.assignments.length > (pageNum + 1) * 10 && reaction === "➡️") {
+                } else if (crs.studentArr.length > (pageNum + 1) * 10 && reaction === "➡️") {
                     sentMsg.reactions.removeAll();
                     sendEmbed(sentMsg, pageNum + 1, crs);
                 }
@@ -32,14 +38,14 @@ const sendEmbed = (msg, pageNum, crs) => {
     });
 }
 
-const CourseAssignmentList = new Command(".assignmentList ", "list the assignments in a course", ["course"], (msg, server, args) => {
+const CourseStudentList = new Command(".studentList ", "list the students in a course", false, ["course"], (msg, server, args) => {
     const crs = Funcs.findCourse(server, args.course);
     if (crs === null) {
         throw new Error("Invalid course" + args.course);
-    } else if (crs.assignments.length === 0) {
-        throw new Error("No assignments" + args.course);
+    } else if (crs.studentArr.length === 0) {
+        throw new Error("No students" + args.course);
     } else {
-        crs.assignments.sort((a, b) => (a.dueDate > b.dueDate) ? 1 : -1);
+        msg.guild.members.fetch();
         msg.channel.send(new Discord.MessageEmbed().setDescription("Loading...")).then(sentMsg => {
             sendEmbed(sentMsg, 0, crs);
         });
@@ -47,8 +53,8 @@ const CourseAssignmentList = new Command(".assignmentList ", "list the assignmen
 }, (msg, e) => {
     if (e.message.startsWith("Invalid course")) {
         msg.channel.send(new Discord.MessageEmbed().setDescription(`The course "${e.message.substring("Invalid course".length)}" does not exist.`));
-    } else if (e.message.startsWith("No assignments")) {
-        msg.channel.send(new Discord.MessageEmbed().setDescription(`The course ${e.message.substring("No assignments".length)} has no assignments.`));
+    } else if (e.message.startsWith("No students")) {
+        msg.channel.send(new Discord.MessageEmbed().setDescription(`The course ${e.message.substring("No students".length)} has no students.`));
     } else if (e.message === "Backslash") {
         msg.channel.send(new Discord.MessageEmbed().setDescription(`No input can include the character "\\\\".`));
     } else {
@@ -56,4 +62,4 @@ const CourseAssignmentList = new Command(".assignmentList ", "list the assignmen
     }
 });
 
-module.exports = CourseAssignmentList;
+module.exports = CourseStudentList;

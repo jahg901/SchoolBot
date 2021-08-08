@@ -4,7 +4,7 @@ const Classes = require("../classes.js");
 const Command = require("../command.js");
 const Funcs = require("../functions.js");
 
-const JoinCourse = new Command(".join ", "join a course", ["course"], (msg, server, args) => {
+const JoinCourse = new Command(".join ", "join a course", false, ["course"], (msg, server, args) => {
     const crs = Funcs.findCourse(server, args.course);
     if (crs === null) {
         throw new Error("Invalid course" + args.course);

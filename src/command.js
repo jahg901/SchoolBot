@@ -1,3 +1,5 @@
+const { MessageEmbed } = require("discord.js");
+
 function parseArgs(content, params, splitter) { //interprets a user's command and outputs a JSON of arguments
     if (content.includes("\\")) {
         throw new Error("Backslash");
@@ -29,14 +31,19 @@ function parseArgs(content, params, splitter) { //interprets a user's command an
 }
 
 class Command { //framework for discord commands
-    constructor(name, description, params, execution, errorHandle, splitter = "\u0000") {
+    constructor(name, description, mod, params, execution, errorHandle, splitter = "\u0000") {
         this.name = name; //the string that triggers the command
         this.description = description; //a description of the command
+        this.mod = mod;
         this.params = params; //an array of parameter names for commands that require arguments
         this.execute = function (msg, server, client) { //run the execution function if a message triggers the command
             if (msg.content.startsWith(name)) {
                 try {
-                    execution(msg, server, parseArgs(msg.content.substring(name.length), params, splitter), client);
+                    if (mod === false || server.modRole === null || msg.member.roles.cache.has(server.modRole)) {
+                        execution(msg, server, parseArgs(msg.content.substring(name.length), params, splitter), client);
+                    } else {
+                        msg.channel.send(new MessageEmbed().setTitle("Sorry, you do not have permission to perform that command."));
+                    }
                 } catch (e) {
                     errorHandle(msg, e);
                 }

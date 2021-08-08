@@ -35,7 +35,7 @@ const sendEmbed = (member, msg, pageNum, courses) => {
     });
 }
 
-const MyCourseList = new Command(".myCourseList", "lists all courses", [], (msg, server, args) => {
+const MyCourseList = new Command(".myCourseList", "lists all courses", false, [], (msg, server, args) => {
     const myCourses = [];
     for (c of server.courses) {
         if (c.students[msg.author.id]) {

@@ -10,7 +10,7 @@ const reactionFilter = (authorID) => {
     });
 }
 
-const DeleteCourse = new Command(".deleteCourse ", "remove a course", ["course"], (msg, server, args) => {
+const DeleteCourse = new Command(".deleteCourse ", "remove a course", true, ["course"], (msg, server, args) => {
     const crs = Funcs.findCourse(server, args.course);
     if (crs === null) {
         throw new Error("Invalid course" + args.course);

@@ -5,7 +5,7 @@ const Command = require("../command.js");
 const Funcs = require("../functions.js");
 
 const ViewAssignment = new Command(".view\n", "view an assignment's information, specifying the course and assignment index",
-    ["course", "index"], (msg, server, args) => {
+    false, ["course", "index"], (msg, server, args) => {
         if (args.course === null || args.index === null) {
             throw new Error("Too few arguments");
         } else {

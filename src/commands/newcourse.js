@@ -4,7 +4,7 @@ const Classes = require("../classes.js");
 const Command = require("../command.js");
 const Funcs = require("../functions.js");
 
-const NewCourse = new Command(".newCourse ", "create a new course in your server", ["name"], (msg, server, args) => {
+const NewCourse = new Command(".newCourse ", "create a new course in your server", true, ["name"], (msg, server, args) => {
     if (args.name.includes("\n")) {
         throw new Error("Line Break");
     } else if (args.name.length > 256) {

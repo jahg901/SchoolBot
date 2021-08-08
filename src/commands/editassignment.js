@@ -33,7 +33,7 @@ const edit = (field, content, assignment, server, client) => {
 }
 
 const EditAssignment = new Command(".editAssignment\n", "edit an assignment's information, specifying the course, assignment index, field to edit and new content.",
-    ["course", "index", "field", "content"], (msg, server, args, client) => {
+    true, ["course", "index", "field", "content"], (msg, server, args, client) => {
         if (args.course === null || args.index === null) {
             throw new Error("Too few arguments");
         } else {

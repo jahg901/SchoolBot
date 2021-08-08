@@ -4,7 +4,7 @@ const Classes = require("../classes.js");
 const Command = require("../command.js");
 const Funcs = require("../functions.js");
 
-const EditCourseName = new Command(".editName\n", "edit the name of a course", ["course", "newname"], (msg, server, args) => {
+const EditCourseName = new Command(".editName\n", "edit the name of a course", true, ["course", "newname"], (msg, server, args) => {
     if (args.course === null || args.newname === null) {
         throw new Error("Too few arguments");
     } else {
