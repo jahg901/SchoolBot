@@ -1,7 +1,8 @@
 const Embed = require("discord.js").MessageEmbed;
+const Funcs = require("./functions.js");
 
 const WelcomeMessage = new Embed()
-    .setColor("ffffff")
+    .setColor(Funcs.Colors.alert)
     .setTitle("Thank you for inviting SchoolBot to this server!")
     .setDescription(`Administrator, type ".setModRole <@roleMention>" to set a role with permission to perform moderator commands, such as adding and deleting courses and assignments.
     

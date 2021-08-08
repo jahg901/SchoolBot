@@ -21,7 +21,7 @@ const NewAssignment = new Command(".newAssignment\n",
             } else {
                 crs.assignments.push(new Classes.Assignment(args.name, args.course, args.dueDate, args.info, server, client));
                 msg.channel.send(new Discord.MessageEmbed()
-                    .setColor("00ff00")
+                    .setColor(Funcs.Colors.confirmation)
                     .setTitle("New assignment created! " + args.name).setDescription(args.info)
                     .addFields(
                         { name: "Course: ", value: args.course, inline: true },
@@ -32,22 +32,22 @@ const NewAssignment = new Command(".newAssignment\n",
     }, (msg, e) => {
         if (e.message === "Too many arguments" || e.message === "Too few arguments") {
             msg.channel.send(new Discord.MessageEmbed()
-                .setColor("ff0000")
+                .setColor(Funcs.Colors.error)
                 .setTitle("Invalid input.")
                 .setDescription("=Please format your command in the following manner:" +
                     "\n\n.newAssignment\n<assignment name>\n<course>\n<due date (yyyy/mm/dd)>\n<additional info>"));
         } else if (e.message.startsWith("Invalid course")) {
             msg.channel.send(new Discord.MessageEmbed()
-                .setColor("ff0000")
+                .setColor(Funcs.Colors.error)
                 .setTitle(`The course "${e.message.substring(14)}" does not exist.`));
         } else if (e.message === "Invalid date") {
             msg.channel.send(new Discord.MessageEmbed()
-                .setColor("ff0000")
+                .setColor(Funcs.Colors.error)
                 .setTitle("Invalid date.")
                 .setDescription("Please provide a valid date in yyyy/mm/dd format."));
         } else if (e.message === "Date in past") {
             msg.channel.send(new Discord.MessageEmbed()
-                .setColor("ff0000")
+                .setColor(Funcs.Colors.error)
                 .setTitle("Invalid date.")
                 .setDescription("The provided due date is in the past. Please provide a due date in the future."));
         } else {

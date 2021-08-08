@@ -1,6 +1,5 @@
 const Discord = require("discord.js");
 
-const Classes = require("../classes.js");
 const Command = require("../command.js");
 const Funcs = require("../functions.js");
 
@@ -10,7 +9,7 @@ const reactionFilter = (reaction, user) => {
 
 const sendEmbed = (msg, pageNum, crs) => {
     const e = new Discord.MessageEmbed()
-        .setColor("0088ff")
+        .setColor(Funcs.Colors.view)
         .setTitle(crs.name)
         .setDescription(crs.studentArr.length + " Student" + Funcs.pluralize(crs.studentArr.length))
         .addField("\u200B", "\u0000");
@@ -46,7 +45,7 @@ const CourseStudentList = new Command(".studentList ", "list the students in a c
         throw new Error("Invalid course" + args.course);
     } else if (crs.studentArr.length === 0) {
         msg.channel.send(new Discord.MessageEmbed()
-            .setColor("0088ff")
+            .setColor(Funcs.Colors.view)
             .setTitle(`The course ${args.course} has no students.`));
     } else {
         msg.guild.members.fetch();
@@ -57,7 +56,7 @@ const CourseStudentList = new Command(".studentList ", "list the students in a c
 }, (msg, e) => {
     if (e.message.startsWith("Invalid course")) {
         msg.channel.send(new Discord.MessageEmbed()
-            .setColor("ff0000")
+            .setColor(Funcs.Colors.error)
             .setTitle(`The course "${e.message.substring(14)}" does not exist.`));
     } else {
         console.log(e);

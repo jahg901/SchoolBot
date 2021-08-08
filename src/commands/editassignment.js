@@ -1,6 +1,5 @@
 const Discord = require("discord.js");
 
-const Classes = require("../classes.js");
 const Command = require("../command.js");
 const Funcs = require("../functions.js");
 
@@ -47,7 +46,7 @@ const EditAssignment = new Command(".editAssignment\n", "edit an assignment's in
                 } else {
                     const assignment = edit(args.field, args.content, crs.assignments[args.index - 1], server, client);
                     msg.channel.send(new Discord.MessageEmbed()
-                        .setColor("#00ff00")
+                        .setColor(Funcs.Colors.success)
                         .setTitle("Assignment edited! " + assignment.name)
                         .setDescription(assignment.info)
                         .addFields(
@@ -60,7 +59,7 @@ const EditAssignment = new Command(".editAssignment\n", "edit an assignment's in
     }, (msg, e) => {
         if (e.message === "Too many arguments" || e.message === "Too few arguments") {
             msg.channel.send(new Discord.MessageEmbed()
-                .setColor("#ff0000")
+                .setColor(Funcs.Colors.error)
                 .setTitle("Invalid input.")
                 .setDescription("Please format your command in the following manner:" +
                     `\n\n.editAssignment\n<course name>\n<index>\n<field to edit>\n<new content>` +
@@ -68,26 +67,26 @@ const EditAssignment = new Command(".editAssignment\n", "edit an assignment's in
                     `\n\nThe field to edit should be either "name", "duedate", or "info".`));
         } else if (e.message.startsWith("Invalid course")) {
             msg.channel.send(new Discord.MessageEmbed()
-                .setColor("#ff0000")
+                .setColor(Funcs.Colors.error)
                 .setTitle(`The course "${e.message.substring(14)}" does not exist.`));
         } else if (e.message.startsWith("Invalid index")) {
             msg.channel.send(new Discord.MessageEmbed()
-                .setColor("#ff0000")
+                .setColor(Funcs.Colors.error)
                 .setTitle("Invalid index.")
                 .setDescription(`Please make sure the index is a valid number corresponding to an assignment in your specified course.`));
         } else if (e.message === "Invalid date") {
             msg.channel.send(new Discord.MessageEmbed()
-                .setColor("#ff0000")
+                .setColor(Funcs.Colors.error)
                 .setTitle("Invalid date.")
                 .setDescription("Please provide a valid date in yyyy/mm/dd format."));
         } else if (e.message === "Date in past") {
             msg.channel.send(new Discord.MessageEmbed()
-                .setColor("#ff0000")
+                .setColor(Funcs.Colors.error)
                 .setTitle("Invalid date.")
                 .setDescription("The provided due date is in the past. Please provide a due date in the future."));
         } else if (e.message === "Invalid field") {
             msg.channel.send(new Discord.MessageEmbed()
-                .setColor("#ff0000")
+                .setColor(Funcs.Colors.error)
                 .setTitle("Invalid field to edit.")
                 .setDescription(`The field to edit should be either "name", "duedate", or "info".`));
         } else {

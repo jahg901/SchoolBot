@@ -1,6 +1,5 @@
 const Discord = require("discord.js");
 
-const Classes = require("../classes.js");
 const Command = require("../command.js");
 const Funcs = require("../functions.js");
 
@@ -14,17 +13,17 @@ const JoinCourse = new Command(".join ", "join a course", false, ["course"], (ms
         crs.students[msg.author.id] = true;
         crs.studentArr.push(msg.author.id);
         msg.channel.send(new Discord.MessageEmbed()
-            .setColor("#00ff00")
+            .setColor(Funcs.Colors.success)
             .setTitle(`You have now joined ${args.course}!`));
     }
 }, (msg, e) => {
     if (e.message.startsWith("Invalid course")) {
         msg.channel.send(new Discord.MessageEmbed()
-            .setColor("ff0000")
+            .setColor(Funcs.Colors.error)
             .setTitle(`The course "${e.message.substring(14)}" does not exist.`));
     } else if (e.message === "Already enrolled") {
         msg.channel.send(new Discord.MessageEmbed()
-            .setColor("ff0000")
+            .setColor(Funcs.Colors.error)
             .setTitle("You are already enrolled in this course."));
     } else {
         console.log(e);

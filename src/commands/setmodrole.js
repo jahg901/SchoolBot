@@ -1,10 +1,9 @@
 const Discord = require("discord.js");
 
-const Classes = require("../classes.js");
 const Command = require("../command.js");
 const Funcs = require("../functions.js");
 
-const SetModRole = new Command(".setModRole ", "set the role given permission to execute moderator commands with this bot", false, ["role"], (msg, server, args) => {
+const SetModRole = new Command(".setModRole ", "set the role given permission to execute moderator commands with this bot (administrator only!)", false, ["role"], (msg, server, args) => {
     if (msg.member.hasPermission("ADMINISTRATOR")) {
         const match = args.role.match(/<@&\d+>/);
         if (match === null) {
@@ -17,7 +16,7 @@ const SetModRole = new Command(".setModRole ", "set the role given permission to
                 } else {
                     server.modRole = role.id;
                     msg.channel.send(new Discord.MessageEmbed()
-                        .setColor("#00ff00")
+                        .setColor(Funcs.Colors.success)
                         .setTitle("Moderator role set!")
                         .setDescription(`Only members with the ${role} role will be able to perform moderator commands.`));
                 }
@@ -29,12 +28,12 @@ const SetModRole = new Command(".setModRole ", "set the role given permission to
 }, (msg, e) => {
     if (e.message === "No permission") {
         msg.channel.send(new Discord.MessageEmbed()
-            .setColor("ff0000")
+            .setColor(Funcs.Colors.error)
             .setTitle("Command prohibited.")
             .setDescription("Sorry, only a member with administrator permissions can perform this command."));
     } else if (e.message === "Invalid input") {
         msg.channel.send(new Discord.MessageEmbed()
-            .setColor("ff0000")
+            .setColor(Funcs.Colors.error)
             .setTitle("Invalid input.")
             .setDescription("Please follow your command with a valid role @mention."));
     } else {

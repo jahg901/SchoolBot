@@ -1,6 +1,5 @@
 const Discord = require("discord.js");
 
-const Classes = require("../classes.js");
 const Command = require("../command.js");
 const Funcs = require("../functions.js");
 
@@ -20,7 +19,7 @@ const DeleteCourse = new Command(".deleteCourse ", "remove a course", true, ["co
         Funcs.deleteInProgress = true;
         msg.channel.send(new Discord.MessageEmbed()
             .setTitle(`Are you sure you want to delete the course "${args.course}"?`)
-            .setColor("#ffff00")
+            .setColor(Funcs.Colors.confirmation)
             .setDescription("React with 🗑️ to confirm, or ❌ to cancel.")).then(sentMsg => {
                 sentMsg.react("🗑️");
                 sentMsg.react("❌");
@@ -43,18 +42,18 @@ const DeleteCourse = new Command(".deleteCourse ", "remove a course", true, ["co
                             }
                         }
                         sentMsg.edit(new Discord.MessageEmbed()
-                            .setColor("#00ff00")
+                            .setColor(Funcs.Colors.success)
                             .setTitle("Course deleted."));
                     } else {
                         sentMsg.edit(new Discord.MessageEmbed()
-                            .setColor("#ff0000")
+                            .setColor(Funcs.Colors.error)
                             .setTitle("Course deletion cancelled."));
                     }
                 }).catch(() => {
                     sentMsg.reactions.removeAll();
                     Funcs.deleteInProgress = false;
                     sentMsg.edit(new Discord.MessageEmbed()
-                        .setColor("#ff0000")
+                        .setColor(Funcs.Colors.error)
                         .setTitle("Confirmation timed out; course deletion cancelled."));
                 });
             });
@@ -62,11 +61,11 @@ const DeleteCourse = new Command(".deleteCourse ", "remove a course", true, ["co
 }, (msg, e) => {
     if (e.message.startsWith("Invalid course")) {
         msg.channel.send(new Discord.MessageEmbed()
-            .setColor("#ff0000")
+            .setColor(Funcs.Colors.error)
             .setTitle(`The course "${e.message.substring(14)}" does not exist.`));
     } else if (e.message === "Active request") {
         msg.channel.send(new Discord.MessageEmbed()
-            .setColor("#ff0000")
+            .setColor(Funcs.Colors.error)
             .setTitle("There can only be one active course/assignment deletion request at once.")
             .setDescription("Please wait until there is no active request to delete a course or assignment."));
     } else {

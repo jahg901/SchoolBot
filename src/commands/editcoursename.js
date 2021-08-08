@@ -1,6 +1,5 @@
 const Discord = require("discord.js");
 
-const Classes = require("../classes.js");
 const Command = require("../command.js");
 const Funcs = require("../functions.js");
 
@@ -14,7 +13,7 @@ const EditCourseName = new Command(".editName\n", "edit the name of a course", t
         } else {
             crs.name = args.newname;
             msg.channel.send(new Discord.MessageEmbed()
-                .setColor("#00ff00")
+                .setColor(Funcs.Colors.success)
                 .setTitle("Course name edited!")
                 .setDescription(`${args.course} => **${crs.name}**`));
         }
@@ -22,13 +21,13 @@ const EditCourseName = new Command(".editName\n", "edit the name of a course", t
 }, (msg, e) => {
     if (e.message === "Too many arguments" || e.message === "Too few arguments") {
         msg.channel.send(new Discord.MessageEmbed()
-            .setColor("#ff0000")
+            .setColor(Funcs.Colors.error)
             .setTitle("Invalid input.")
             .setDescription("Please format your command in the following manner:" +
                 `\n\n.editName\n<current course name>\n<new course name>`));
     } else if (e.message.startsWith("Invalid course")) {
         msg.channel.send(new Discord.MessageEmbed()
-            .setColor("#ff0000")
+            .setColor(Funcs.Colors.error)
             .setTitle(`The course "${e.message.substring(14)}" does not exist.`));
     } else {
         console.log(e);

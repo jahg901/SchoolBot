@@ -1,6 +1,5 @@
 const Discord = require("discord.js");
 
-const Classes = require("../classes.js");
 const Command = require("../command.js");
 const Funcs = require("../functions.js");
 
@@ -28,7 +27,7 @@ const DeleteAssignment = new Command(".deleteAssignment\n", "remove an assignmen
                     Funcs.deleteInProgress = true;
                     const assignment = crs.assignments[args.index - 1];
                     msg.channel.send(new Discord.MessageEmbed()
-                        .setColor("#ffff00")
+                        .setColor(Funcs.Colors.confirmation)
                         .setTitle(`Are you sure you want to delete this assignment?`)
                         .setDescription(assignment.name)
                         .addFields(
@@ -55,18 +54,18 @@ const DeleteAssignment = new Command(".deleteAssignment\n", "remove an assignmen
                                         }
                                     }
                                     sentMsg.edit(new Discord.MessageEmbed()
-                                        .setColor("#00ff00")
+                                        .setColor(Funcs.Colors.success)
                                         .setTitle("Assignment deleted."));
                                 } else {
                                     sentMsg.edit(new Discord.MessageEmbed()
-                                        .setColor("#ff0000")
+                                        .setColor(Funcs.Colors.error)
                                         .setTitle("Assignment deletion cancelled."));
                                 }
                             }).catch(() => {
                                 sentMsg.reactions.removeAll();
                                 Funcs.deleteInProgress = false;
                                 sentMsg.edit(new Discord.MessageEmbed()
-                                    .setColor("#ff0000")
+                                    .setColor(Funcs.Colors.error)
                                     .setTitle("Confirmation timed out; assignment deletion cancelled."));
                             });
                         });
@@ -76,22 +75,22 @@ const DeleteAssignment = new Command(".deleteAssignment\n", "remove an assignmen
     }, (msg, e) => {
         if (e.message === "Too many arguments" || e.message === "Too few arguments") {
             msg.channel.send(new Discord.MessageEmbed()
-                .setColor("#ff0000")
+                .setColor(Funcs.Colors.error)
                 .setTitle("Invalid input.")
                 .setDescription("Please format your command in the following manner:" +
                     `\n\n.deleteAssignment\n<course name>\n<index>\n\n(The index of your assignment can be found by using the command ".assignmentList <course>".)`));
         } else if (e.message === "Active request") {
             msg.channel.send(new Discord.MessageEmbed()
-                .setColor("#ff0000")
+                .setColor(Funcs.Colors.error)
                 .setTitle("There can only be one active course/assignment deletion request at once.")
                 .setDescription("Please wait until there is no active request to delete a course or assignment."));
         } else if (e.message.startsWith("Invalid course")) {
             msg.channel.send(new Discord.MessageEmbed()
-                .setColor("#ff0000")
+                .setColor(Funcs.Colors.error)
                 .setTitle(`The course "${e.message.substring(14)}" does not exist.`));
         } else if (e.message.startsWith("Invalid index")) {
             msg.channel.send(new Discord.MessageEmbed()
-                .setColor("#ff0000")
+                .setColor(Funcs.Colors.error)
                 .setTitle("Invalid index.")
                 .setDescription("Please make sure the index is a valid number corresponding to an assignment in your specified course."));
         } else {

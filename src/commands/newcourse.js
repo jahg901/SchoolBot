@@ -18,17 +18,17 @@ const NewCourse = new Command(".newCourse ", "create a new course in your server
 }, (msg, e) => {
     if (e.message === "Line Break") {
         msg.channel.send(new Discord.MessageEmbed()
-            .setColor("ff0000")
+            .setColor(Funcs.Colors.error)
             .setTitle("Invalid name.")
             .setDescription("A course name cannot include any line breaks."));
     } else if (e.message === "Too many characters") {
         msg.channel.send(new Discord.MessageEmbed()
-            .setColor("ff0000")
+            .setColor(Funcs.Colors.error)
             .setTitle("Invalid name.")
             .setDescription("A course name cannot be longer than 256 characters."));
     } else if (e.message === "Already exists") {
         msg.channel.send(new Discord.MessageEmbed()
-            .setColor("ff0000")
+            .setColor(Funcs.Colors.error)
             .setTitle("A course with this name already exists."));
     } else {
         console.log(e);

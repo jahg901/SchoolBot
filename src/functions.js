@@ -1,4 +1,10 @@
-const Classes = require("./classes.js");
+const Colors = {
+    success: "#00ff00",
+    error: "#ff0000",
+    view: "#0088ff",
+    confirmation: "#ffff00",
+    alert: "#ffffff"
+}
 
 function findCourse(s, c) {
     for (let i = 0; i < s.courses.length; i++) {
@@ -62,6 +68,7 @@ function pluralize(value) {
 let deleteInProgress = false;
 
 module.exports = {
+    Colors,
     findCourse,
     checkDate,
     dateFormat,

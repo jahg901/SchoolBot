@@ -1,6 +1,5 @@
 const Discord = require("discord.js");
 
-const Classes = require("../classes.js");
 const Command = require("../command.js");
 const Funcs = require("../functions.js");
 
@@ -10,7 +9,7 @@ const reactionFilter = (reaction, user) => {
 
 const sendEmbed = (msg, pageNum, courses) => {
     const e = new Discord.MessageEmbed()
-        .setColor("#0088ff")
+        .setColor(Funcs.Colors.view)
         .setTitle("All Courses");
     for (let i = pageNum * 10; i < courses.length && i < (pageNum + 1) * 10; i++) {
         e.addField(courses[i].name, courses[i].assignments.length + " Assignment" + Funcs.pluralize(courses[i].assignments.length)
@@ -37,7 +36,7 @@ const sendEmbed = (msg, pageNum, courses) => {
 const FullCourseList = new Command(".fullCourseList", "lists all courses", false, [], (msg, server, args) => {
     if (server.courses.length === 0) {
         msg.channel.send(new Discord.MessageEmbed()
-            .setColor("#0088ff")
+            .setColor(Funcs.Colors.view)
             .setTitle("No courses currently exist."));
     } else {
         msg.channel.send(new Discord.MessageEmbed().setDescription("Loading...")).then(sentMsg => {
@@ -47,7 +46,7 @@ const FullCourseList = new Command(".fullCourseList", "lists all courses", false
 }, (msg, e) => {
     if (e.message === "Too many arguments") {
         msg.channel.send(new Discord.MessageEmbed()
-            .setColor("#ff0000")
+            .setColor(Funcs.Colors.error)
             .setTitle("Invalid input.")
             .setDescription(`The command ".fullCourseList" takes no arguments.`))
     } else {

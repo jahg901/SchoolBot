@@ -41,7 +41,7 @@ class Command { //framework for discord commands
                         execution(msg, server, parseArgs(msg.content.substring(name.length), params, splitter), client);
                     } else {
                         msg.channel.send(new MessageEmbed()
-                            .setColor("ff0000")
+                            .setColor(Funcs.Colors.error)
                             .setTitle("Command prohibited.")
                             .setDescription("Sorry, you do not have permission to perform that command."));
                     }

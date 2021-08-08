@@ -1,6 +1,5 @@
 const Discord = require("discord.js");
 
-const Classes = require("../classes.js");
 const Command = require("../command.js");
 const Funcs = require("../functions.js");
 
@@ -10,7 +9,7 @@ const reactionFilter = (reaction, user) => {
 
 const sendEmbed = (msg, pageNum, crs) => {
     const e = new Discord.MessageEmbed().setTitle(crs.name)
-        .setColor("#0088ff")
+        .setColor(Funcs.Colors.view)
         .setDescription(crs.assignments.length + " Assignment" + Funcs.pluralize(crs.assignments.length));
     for (let i = pageNum * 10; i < crs.assignments.length && i < (pageNum + 1) * 10; i++) {
         e.addField(`${i + 1}. ${crs.assignments[i].name}`, `Due ${Funcs.dateFormat.format(crs.assignments[i].dueDate)}`);
@@ -39,7 +38,7 @@ const CourseAssignmentList = new Command(".assignmentList ", "list the assignmen
         throw new Error("Invalid course" + args.course);
     } else if (crs.assignments.length === 0) {
         msg.channel.send(new Discord.MessageEmbed()
-            .setColor("#0088ff")
+            .setColor(Funcs.Colors.view)
             .setTitle(`The course ${args.course} has no assignments.`));
     } else {
         crs.assignments.sort((a, b) => (a.dueDate > b.dueDate) ? 1 : -1);
@@ -50,7 +49,7 @@ const CourseAssignmentList = new Command(".assignmentList ", "list the assignmen
 }, (msg, e) => {
     if (e.message.startsWith("Invalid course")) {
         msg.channel.send(new Discord.MessageEmbed()
-            .setColor("#ff0000")
+            .setColor(Funcs.Colors.error)
             .setTitle(`The course "${e.message.substring(14)}" does not exist.`));
     } else {
         console.log(e);

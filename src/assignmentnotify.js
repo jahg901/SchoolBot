@@ -19,7 +19,7 @@ const newJob = ((assignment, server, client) => {
                 for (st of crs.studentArr) {
                     c.users.fetch(st).then(student => {
                         student.send(new Discord.MessageEmbed()
-                            .setColor("ffffff")
+                            .setColor(Funcs.Colors.alert)
                             .setTitle(`${a.name} is due in one day!`)).catch(() => { });
                     });
                 }
