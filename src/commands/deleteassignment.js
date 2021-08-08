@@ -87,7 +87,7 @@ const DeleteAssignment = new Command(".deleteAssignment\n", "remove an assignmen
         } else if (e.message.startsWith("Invalid course")) {
             msg.channel.send(new Discord.MessageEmbed()
                 .setColor(Funcs.Colors.error)
-                .setTitle(`The course "${e.message.substring(14)}" does not exist.`));
+                .setTitle(`The course "${e.message.substr(14, 128)}" does not exist.`));
         } else if (e.message.startsWith("Invalid index")) {
             msg.channel.send(new Discord.MessageEmbed()
                 .setColor(Funcs.Colors.error)

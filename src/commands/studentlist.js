@@ -57,7 +57,7 @@ const CourseStudentList = new Command(".studentList ", "list the students in a c
     if (e.message.startsWith("Invalid course")) {
         msg.channel.send(new Discord.MessageEmbed()
             .setColor(Funcs.Colors.error)
-            .setTitle(`The course "${e.message.substring(14)}" does not exist.`));
+            .setTitle(`The course "${e.message.substr(14, 128)}" does not exist.`));
     } else {
         console.log(e);
     }

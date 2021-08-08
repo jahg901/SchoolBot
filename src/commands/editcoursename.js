@@ -10,6 +10,12 @@ const EditCourseName = new Command(".editName\n", "edit the name of a course", t
         const crs = Funcs.findCourse(server, args.course);
         if (crs === null) {
             throw new Error("Invalid course" + args.course);
+        } else if (args.newname.includes("\n")) {
+            throw new Error("Line Break");
+        } else if (args.newname.length > 128) {
+            throw new Error("Too many characters");
+        } else if (Funcs.findCourse(server, args.newname) !== null) {
+            throw new Error("Already exists");
         } else {
             crs.name = args.newname;
             msg.channel.send(new Discord.MessageEmbed()
@@ -28,7 +34,21 @@ const EditCourseName = new Command(".editName\n", "edit the name of a course", t
     } else if (e.message.startsWith("Invalid course")) {
         msg.channel.send(new Discord.MessageEmbed()
             .setColor(Funcs.Colors.error)
-            .setTitle(`The course "${e.message.substring(14)}" does not exist.`));
+            .setTitle(`The course "${e.message.substr(14, 128)}" does not exist.`));
+    } else if (e.message === "Line Break") {
+        msg.channel.send(new Discord.MessageEmbed()
+            .setColor(Funcs.Colors.error)
+            .setTitle("Invalid name.")
+            .setDescription("A course name cannot include any line breaks."));
+    } else if (e.message === "Too many characters") {
+        msg.channel.send(new Discord.MessageEmbed()
+            .setColor(Funcs.Colors.error)
+            .setTitle("Invalid name.")
+            .setDescription("A course name cannot be longer than 128 characters."));
+    } else if (e.message === "Already exists") {
+        msg.channel.send(new Discord.MessageEmbed()
+            .setColor(Funcs.Colors.error)
+            .setTitle("A course with this name already exists."));
     } else {
         console.log(e);
     }

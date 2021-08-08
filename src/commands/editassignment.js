@@ -6,7 +6,11 @@ const Funcs = require("../functions.js");
 const edit = (field, content, assignment, server, client) => {
     switch (field) {
         case "name":
-            assignment.name = content;
+            if (content.length > 128) {
+                throw new Error("Name too long");
+            } else {
+                assignment.name = content;
+            }
             break;
 
         case "duedate":
@@ -22,7 +26,11 @@ const edit = (field, content, assignment, server, client) => {
             break;
 
         case "info":
-            assignment.info = content;
+            if (content.length > 4096) {
+                throw new Error("Description too long");
+            } else {
+                assignment.info = content;
+            }
             break;
 
         default:
@@ -68,7 +76,7 @@ const EditAssignment = new Command(".editAssignment\n", "edit an assignment's in
         } else if (e.message.startsWith("Invalid course")) {
             msg.channel.send(new Discord.MessageEmbed()
                 .setColor(Funcs.Colors.error)
-                .setTitle(`The course "${e.message.substring(14)}" does not exist.`));
+                .setTitle(`The course "${e.message.substr(14, 128)}" does not exist.`));
         } else if (e.message.startsWith("Invalid index")) {
             msg.channel.send(new Discord.MessageEmbed()
                 .setColor(Funcs.Colors.error)
@@ -89,6 +97,16 @@ const EditAssignment = new Command(".editAssignment\n", "edit an assignment's in
                 .setColor(Funcs.Colors.error)
                 .setTitle("Invalid field to edit.")
                 .setDescription(`The field to edit should be either "name", "duedate", or "info".`));
+        } else if (e.message === "Name too long") {
+            msg.channel.send(new Discord.MessageEmbed()
+                .setColor(Funcs.Colors.error)
+                .setTitle("Invalid name.")
+                .setDescription("An assignment name cannot be longer than 128 characters."));
+        } else if (e.message === "Description too long") {
+            msg.channel.send(new Discord.MessageEmbed()
+                .setColor(Funcs.Colors.error)
+                .setTitle("Invalid description.")
+                .setDescription("The additional info cannot be longer than 4096 characters."));
         } else {
             console.log(e);
         }

@@ -50,7 +50,7 @@ const CourseAssignmentList = new Command(".assignmentList ", "list the assignmen
     if (e.message.startsWith("Invalid course")) {
         msg.channel.send(new Discord.MessageEmbed()
             .setColor(Funcs.Colors.error)
-            .setTitle(`The course "${e.message.substring(14)}" does not exist.`));
+            .setTitle(`The course "${e.message.substr(14, 128)}" does not exist.`));
     } else {
         console.log(e);
     }

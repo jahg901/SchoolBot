@@ -7,7 +7,7 @@ const Funcs = require("../functions.js");
 const NewCourse = new Command(".newCourse ", "create a new course in your server", true, ["name"], (msg, server, args) => {
     if (args.name.includes("\n")) {
         throw new Error("Line Break");
-    } else if (args.name.length > 256) {
+    } else if (args.name.length > 128) {
         throw new Error("Too many characters");
     } else if (Funcs.findCourse(server, args.name) !== null) {
         throw new Error("Already exists");
@@ -25,7 +25,7 @@ const NewCourse = new Command(".newCourse ", "create a new course in your server
         msg.channel.send(new Discord.MessageEmbed()
             .setColor(Funcs.Colors.error)
             .setTitle("Invalid name.")
-            .setDescription("A course name cannot be longer than 256 characters."));
+            .setDescription("A course name cannot be longer than 128 characters."));
     } else if (e.message === "Already exists") {
         msg.channel.send(new Discord.MessageEmbed()
             .setColor(Funcs.Colors.error)

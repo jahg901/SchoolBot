@@ -9,6 +9,10 @@ const NewAssignment = new Command(".newAssignment\n",
     true, ["name", "course", "dueDate", "info"], (msg, server, args, client) => {
         if (args.name === null || args.course === null || args.dueDate === null || args.info === null) {
             throw new Error("Too few arguments");
+        } else if (args.name.length > 128) {
+            throw new Error("Name too long");
+        } else if (args.info.length > 4096) {
+            throw new Error("Description too long");
         } else {
             const crs = Funcs.findCourse(server, args.course);
             args.dueDate = Funcs.checkDate(args.dueDate);
@@ -39,7 +43,7 @@ const NewAssignment = new Command(".newAssignment\n",
         } else if (e.message.startsWith("Invalid course")) {
             msg.channel.send(new Discord.MessageEmbed()
                 .setColor(Funcs.Colors.error)
-                .setTitle(`The course "${e.message.substring(14)}" does not exist.`));
+                .setTitle(`The course "${e.message.substr(14, 128)}" does not exist.`));
         } else if (e.message === "Invalid date") {
             msg.channel.send(new Discord.MessageEmbed()
                 .setColor(Funcs.Colors.error)
@@ -50,6 +54,16 @@ const NewAssignment = new Command(".newAssignment\n",
                 .setColor(Funcs.Colors.error)
                 .setTitle("Invalid date.")
                 .setDescription("The provided due date is in the past. Please provide a due date in the future."));
+        } else if (e.message === "Name too long") {
+            msg.channel.send(new Discord.MessageEmbed()
+                .setColor(Funcs.Colors.error)
+                .setTitle("Invalid name.")
+                .setDescription("An assignment name cannot be longer than 128 characters."));
+        } else if (e.message === "Description too long") {
+            msg.channel.send(new Discord.MessageEmbed()
+                .setColor(Funcs.Colors.error)
+                .setTitle("Invalid description.")
+                .setDescription("The additional info cannot be longer than 4096 characters."));
         } else {
             console.log(e);
         }
