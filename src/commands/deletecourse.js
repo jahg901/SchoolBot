@@ -18,7 +18,9 @@ const DeleteCourse = new Command(".deleteCourse ", "remove a course", true, ["co
         throw new Error("Active request");
     } else {
         Funcs.deleteInProgress = true;
-        msg.channel.send(new Discord.MessageEmbed().setTitle(`Are you sure you want to delete the course "${args.course}"?`)
+        msg.channel.send(new Discord.MessageEmbed()
+            .setTitle(`Are you sure you want to delete the course "${args.course}"?`)
+            .setColor("#ffff00")
             .setDescription("React with 🗑️ to confirm, or ❌ to cancel.")).then(sentMsg => {
                 sentMsg.react("🗑️");
                 sentMsg.react("❌");
@@ -40,25 +42,33 @@ const DeleteCourse = new Command(".deleteCourse ", "remove a course", true, ["co
                                 break;
                             }
                         }
-                        sentMsg.edit(new Discord.MessageEmbed().setTitle("Course deleted."));
+                        sentMsg.edit(new Discord.MessageEmbed()
+                            .setColor("#00ff00")
+                            .setTitle("Course deleted."));
                     } else {
-                        sentMsg.edit(new Discord.MessageEmbed().setDescription("Course deletion cancelled."));
+                        sentMsg.edit(new Discord.MessageEmbed()
+                            .setColor("#ff0000")
+                            .setTitle("Course deletion cancelled."));
                     }
                 }).catch(() => {
                     sentMsg.reactions.removeAll();
                     Funcs.deleteInProgress = false;
-                    sentMsg.edit(new Discord.MessageEmbed().setDescription("Confirmation timed out; course deletion cancelled."));
+                    sentMsg.edit(new Discord.MessageEmbed()
+                        .setColor("#ff0000")
+                        .setTitle("Confirmation timed out; course deletion cancelled."));
                 });
             });
     }
 }, (msg, e) => {
     if (e.message.startsWith("Invalid course")) {
-        msg.channel.send(new Discord.MessageEmbed().setDescription(`The course "${e.message.substring("Invalid course".length)}" does not exist.`));
+        msg.channel.send(new Discord.MessageEmbed()
+            .setColor("#ff0000")
+            .setTitle(`The course "${e.message.substring(14)}" does not exist.`));
     } else if (e.message === "Active request") {
-        msg.channel.send(new Discord.MessageEmbed().setTitle("There can only be one active course/assignment deletion request at once.")
+        msg.channel.send(new Discord.MessageEmbed()
+            .setColor("#ff0000")
+            .setTitle("There can only be one active course/assignment deletion request at once.")
             .setDescription("Please wait until there is no active request to delete a course or assignment."));
-    } else if (e.message === "Backslash") {
-        msg.channel.send(new Discord.MessageEmbed().setDescription(`No input can include the character "\\\\".`));
     } else {
         console.log(e);
     }

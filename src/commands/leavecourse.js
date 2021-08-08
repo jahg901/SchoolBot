@@ -13,15 +13,19 @@ const LeaveCourse = new Command(".leave ", "leave a course", false, ["course"], 
     } else {
         delete crs.students[msg.author.id];
         crs.studentArr.splice(crs.studentArr.indexOf(msg.author.id), 1);
-        msg.channel.send(new Discord.MessageEmbed().setTitle(`You have now left ${args.course}!`));
+        msg.channel.send(new Discord.MessageEmbed()
+            .setColor("00ff00")
+            .setTitle(`You have now left ${args.course}!`));
     }
 }, (msg, e) => {
     if (e.message.startsWith("Invalid course")) {
-        msg.channel.send(new Discord.MessageEmbed().setDescription(`The course "${e.message.substring("Invalid course".length)}" does not exist.`));
+        msg.channel.send(new Discord.MessageEmbed()
+            .setColor("#ff0000")
+            .setTitle(`The course "${e.message.substring(14)}" does not exist.`));
     } else if (e.message === "Not enrolled") {
-        msg.channel.send(new Discord.MessageEmbed().setDescription(`You are not enrolled in this course.`));
-    } else if (e.message === "Backslash") {
-        msg.channel.send(new Discord.MessageEmbed().setDescription(`No input can include the character "\\\\".`));
+        msg.channel.send(new Discord.MessageEmbed()
+            .setColor("#ff0000")
+            .setTitle(`You are not enrolled in this course.`));
     } else {
         console.log(e);
     }

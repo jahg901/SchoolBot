@@ -17,13 +17,19 @@ const NewCourse = new Command(".newCourse ", "create a new course in your server
     }
 }, (msg, e) => {
     if (e.message === "Line Break") {
-        msg.channel.send(new Discord.MessageEmbed().setDescription("A course name cannot include any line breaks."));
+        msg.channel.send(new Discord.MessageEmbed()
+            .setColor("ff0000")
+            .setTitle("Invalid name.")
+            .setDescription("A course name cannot include any line breaks."));
     } else if (e.message === "Too many characters") {
-        msg.channel.send(new Discord.MessageEmbed().setDescription("A course name cannot be longer than 256 characters."));
+        msg.channel.send(new Discord.MessageEmbed()
+            .setColor("ff0000")
+            .setTitle("Invalid name.")
+            .setDescription("A course name cannot be longer than 256 characters."));
     } else if (e.message === "Already exists") {
-        msg.channel.send(new Discord.MessageEmbed().setDescription("A course with this name already exists."));
-    } else if (e.message === "Backslash") {
-        msg.channel.send(new Discord.MessageEmbed().setDescription(`No input can include the character "\\\\".`));
+        msg.channel.send(new Discord.MessageEmbed()
+            .setColor("ff0000")
+            .setTitle("A course with this name already exists."));
     } else {
         console.log(e);
     }

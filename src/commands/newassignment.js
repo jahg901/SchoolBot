@@ -20,26 +20,36 @@ const NewAssignment = new Command(".newAssignment\n",
                 throw new Error("Date in past");
             } else {
                 crs.assignments.push(new Classes.Assignment(args.name, args.course, args.dueDate, args.info, server, client));
-                msg.channel.send(new Discord.MessageEmbed().setTitle("New assignment created! " + args.name).setDescription(args.info)
+                msg.channel.send(new Discord.MessageEmbed()
+                    .setColor("00ff00")
+                    .setTitle("New assignment created! " + args.name).setDescription(args.info)
                     .addFields(
-                        { name: 'Course: ', value: args.course, inline: true },
-                        { name: 'Due Date: ', value: Funcs.dateFormat.format(args.dueDate), inline: true },
+                        { name: "Course: ", value: args.course, inline: true },
+                        { name: "Due Date: ", value: Funcs.dateFormat.format(args.dueDate), inline: true },
                     ));
             }
         }
     }, (msg, e) => {
         if (e.message === "Too many arguments" || e.message === "Too few arguments") {
             msg.channel.send(new Discord.MessageEmbed()
-                .setDescription("Invalid input. Please format your command in the following manner:" +
+                .setColor("ff0000")
+                .setTitle("Invalid input.")
+                .setDescription("=Please format your command in the following manner:" +
                     "\n\n.newAssignment\n<assignment name>\n<course>\n<due date (yyyy/mm/dd)>\n<additional info>"));
         } else if (e.message.startsWith("Invalid course")) {
-            msg.channel.send(new Discord.MessageEmbed().setDescription(`The course "${e.message.substring("Invalid course".length)}" does not exist.`));
+            msg.channel.send(new Discord.MessageEmbed()
+                .setColor("ff0000")
+                .setTitle(`The course "${e.message.substring(14)}" does not exist.`));
         } else if (e.message === "Invalid date") {
-            msg.channel.send(new Discord.MessageEmbed().setDescription("Invalid date. Please provide a valid date in yyyy/mm/dd format."));
+            msg.channel.send(new Discord.MessageEmbed()
+                .setColor("ff0000")
+                .setTitle("Invalid date.")
+                .setDescription("Please provide a valid date in yyyy/mm/dd format."));
         } else if (e.message === "Date in past") {
-            msg.channel.send(new Discord.MessageEmbed().setDescription("The provided due date is in the past. Please provide a due date in the future."));
-        } else if (e.messgae === "Backslash") {
-            msg.channel.send(new Discord.MessageEmbed().setDescription(`No input can include the character "\\\\".`));
+            msg.channel.send(new Discord.MessageEmbed()
+                .setColor("ff0000")
+                .setTitle("Invalid date.")
+                .setDescription("The provided due date is in the past. Please provide a due date in the future."));
         } else {
             console.log(e);
         }

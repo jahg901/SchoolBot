@@ -9,10 +9,14 @@ const reactionFilter = (reaction, user) => {
 }
 
 const sendEmbed = (msg, pageNum, myAssignments) => {
-    const e = new Discord.MessageEmbed().setTitle(msg.member.nickname);
-    if (msg.member.nickname === null) e.setTitle(msg.author.tag);
-    e.setDescription(myAssignments.length + " Assignment" + Funcs.pluralize(myAssignments.length));
-
+    const e = new Discord.MessageEmbed()
+        .setColor("#0088ff")
+        .setDescription(myAssignments.length + " Assignment" + Funcs.pluralize(myAssignments.length));
+    if (msg.member.nickname === null) {
+        e.setTitle(msg.author.tag);
+    } else {
+        e.setTitle(msg.member.nickname);
+    }
     for (let i = pageNum * 10; i < myAssignments.length && i < (pageNum + 1) * 10; i++) {
         e.addField(`${i + 1}. ${myAssignments[i].name}`, `Due ${Funcs.dateFormat.format(myAssignments[i].dueDate)}`);
     }
@@ -42,7 +46,9 @@ const MyAssignmentList = new Command(".myAssignmentList", "list the assignments 
         }
     }
     if (myAssignments.length === 0) {
-        throw new Error("No assignments" + args.course);
+        msg.channel.send(new Discord.MessageEmbed()
+            .setColor("#0088ff")
+            .setTitle(`You currently have no assignments.`));
     } else {
         myAssignments.sort((a, b) => (a.dueDate > b.dueDate) ? 1 : -1);
         msg.channel.send(new Discord.MessageEmbed().setDescription("Loading...")).then(sentMsg => {
@@ -50,10 +56,11 @@ const MyAssignmentList = new Command(".myAssignmentList", "list the assignments 
         });
     }
 }, (msg, e) => {
-    if (e.message.startsWith("No assignments")) {
-        msg.channel.send(new Discord.MessageEmbed().setDescription(`You currently have no assignments.`));
-    } else if (e.message === "Too many arguments") {
-        msg.channel.send(new Discord.MessageEmbed().setDescription(`Invalid input: the command ".fullCourseList" takes no arguments.`))
+    if (e.message === "Too many arguments") {
+        msg.channel.send(new Discord.MessageEmbed()
+            .setColor("ff0000")
+            .setTitle("Invalid input.")
+            .setDescription(`The command ".fullCourseList" takes no arguments.`))
     } else {
         console.log(e);
     }

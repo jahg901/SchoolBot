@@ -16,7 +16,9 @@ const SetModRole = new Command(".setModRole ", "set the role given permission to
                     throw new Error("Invalid input");
                 } else {
                     server.modRole = role.id;
-                    msg.channel.send(new Discord.MessageEmbed().setTitle("Moderator role set!")
+                    msg.channel.send(new Discord.MessageEmbed()
+                        .setColor("#00ff00")
+                        .setTitle("Moderator role set!")
                         .setDescription(`Only members with the ${role} role will be able to perform moderator commands.`));
                 }
             }
@@ -26,9 +28,15 @@ const SetModRole = new Command(".setModRole ", "set the role given permission to
     }
 }, (msg, e) => {
     if (e.message === "No permission") {
-        msg.channel.send(new Discord.MessageEmbed().setTitle("Sorry, only a member with administrator permissions can perform this command."));
+        msg.channel.send(new Discord.MessageEmbed()
+            .setColor("ff0000")
+            .setTitle("Command prohibited.")
+            .setDescription("Sorry, only a member with administrator permissions can perform this command."));
     } else if (e.message === "Invalid input") {
-        msg.channel.send(new Discord.MessageEmbed().setTitle("Invalid input. Please follow your command with a valid role @mention."));
+        msg.channel.send(new Discord.MessageEmbed()
+            .setColor("ff0000")
+            .setTitle("Invalid input.")
+            .setDescription("Please follow your command with a valid role @mention."));
     } else {
         console.log(e);
     }

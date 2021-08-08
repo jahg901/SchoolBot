@@ -18,7 +18,9 @@ const newJob = ((assignment, server, client) => {
                 const crs = findCourse(s, a.course);
                 for (st of crs.studentArr) {
                     c.users.fetch(st).then(student => {
-                        student.send(new Discord.MessageEmbed().setTitle(`${a.name} is due in one day!`)).catch(() => { });
+                        student.send(new Discord.MessageEmbed()
+                            .setColor("ffffff")
+                            .setTitle(`${a.name} is due in one day!`)).catch(() => { });
                     });
                 }
                 job1.cancel();

@@ -13,19 +13,23 @@ const EditCourseName = new Command(".editName\n", "edit the name of a course", t
             throw new Error("Invalid course" + args.course);
         } else {
             crs.name = args.newname;
-            msg.channel.send(new Discord.MessageEmbed().setTitle(`Course name edited!`)
+            msg.channel.send(new Discord.MessageEmbed()
+                .setColor("#00ff00")
+                .setTitle("Course name edited!")
                 .setDescription(`${args.course} => **${crs.name}**`));
         }
     }
 }, (msg, e) => {
     if (e.message === "Too many arguments" || e.message === "Too few arguments") {
         msg.channel.send(new Discord.MessageEmbed()
-            .setDescription("Invalid input. Please format your command in the following manner:" +
+            .setColor("#ff0000")
+            .setTitle("Invalid input.")
+            .setDescription("Please format your command in the following manner:" +
                 `\n\n.editName\n<current course name>\n<new course name>`));
     } else if (e.message.startsWith("Invalid course")) {
-        msg.channel.send(new Discord.MessageEmbed().setDescription(`The course "${e.message.substring("Invalid course".length)}" does not exist.`));
-    } else if (e.message === "Backslash") {
-        msg.channel.send(new Discord.MessageEmbed().setDescription(`No input can include the character "\\\\".`));
+        msg.channel.send(new Discord.MessageEmbed()
+            .setColor("#ff0000")
+            .setTitle(`The course "${e.message.substring(14)}" does not exist.`));
     } else {
         console.log(e);
     }

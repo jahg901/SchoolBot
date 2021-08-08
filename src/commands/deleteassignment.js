@@ -27,7 +27,9 @@ const DeleteAssignment = new Command(".deleteAssignment\n", "remove an assignmen
                 } else {
                     Funcs.deleteInProgress = true;
                     const assignment = crs.assignments[args.index - 1];
-                    msg.channel.send(new Discord.MessageEmbed().setTitle(`Are you sure you want to delete this assignment?`)
+                    msg.channel.send(new Discord.MessageEmbed()
+                        .setColor("#ffff00")
+                        .setTitle(`Are you sure you want to delete this assignment?`)
                         .setDescription(assignment.name)
                         .addFields(
                             { name: 'Course: ', value: assignment.course, inline: true },
@@ -52,14 +54,20 @@ const DeleteAssignment = new Command(".deleteAssignment\n", "remove an assignmen
                                             break;
                                         }
                                     }
-                                    sentMsg.edit(new Discord.MessageEmbed().setTitle("Assignment deleted."));
+                                    sentMsg.edit(new Discord.MessageEmbed()
+                                        .setColor("#00ff00")
+                                        .setTitle("Assignment deleted."));
                                 } else {
-                                    sentMsg.edit(new Discord.MessageEmbed().setDescription("Assignment deletion cancelled."));
+                                    sentMsg.edit(new Discord.MessageEmbed()
+                                        .setColor("#ff0000")
+                                        .setTitle("Assignment deletion cancelled."));
                                 }
                             }).catch(() => {
                                 sentMsg.reactions.removeAll();
                                 Funcs.deleteInProgress = false;
-                                sentMsg.edit(new Discord.MessageEmbed().setDescription("Confirmation timed out; assignment deletion cancelled."));
+                                sentMsg.edit(new Discord.MessageEmbed()
+                                    .setColor("#ff0000")
+                                    .setTitle("Confirmation timed out; assignment deletion cancelled."));
                             });
                         });
                 }
@@ -68,18 +76,24 @@ const DeleteAssignment = new Command(".deleteAssignment\n", "remove an assignmen
     }, (msg, e) => {
         if (e.message === "Too many arguments" || e.message === "Too few arguments") {
             msg.channel.send(new Discord.MessageEmbed()
-                .setDescription("Invalid input. Please format your command in the following manner:" +
+                .setColor("#ff0000")
+                .setTitle("Invalid input.")
+                .setDescription("Please format your command in the following manner:" +
                     `\n\n.deleteAssignment\n<course name>\n<index>\n\n(The index of your assignment can be found by using the command ".assignmentList <course>".)`));
         } else if (e.message === "Active request") {
-            msg.channel.send(new Discord.MessageEmbed().setTitle("There can only be one active course/assignment deletion request at once.")
+            msg.channel.send(new Discord.MessageEmbed()
+                .setColor("#ff0000")
+                .setTitle("There can only be one active course/assignment deletion request at once.")
                 .setDescription("Please wait until there is no active request to delete a course or assignment."));
         } else if (e.message.startsWith("Invalid course")) {
-            msg.channel.send(new Discord.MessageEmbed().setDescription(`The course "${e.message.substring("Invalid course".length)}" does not exist.`));
+            msg.channel.send(new Discord.MessageEmbed()
+                .setColor("#ff0000")
+                .setTitle(`The course "${e.message.substring(14)}" does not exist.`));
         } else if (e.message.startsWith("Invalid index")) {
-            msg.channel.send(new Discord.MessageEmbed().setDescription(`Invalid index. Please make sure the index is a `
-                + `valid number corresponding to an assignment in your specified course.`));
-        } else if (e.messgae === "Backslash") {
-            msg.channel.send(new Discord.MessageEmbed().setDescription(`No input can include the character "\\\\".`));
+            msg.channel.send(new Discord.MessageEmbed()
+                .setColor("#ff0000")
+                .setTitle("Invalid index.")
+                .setDescription("Please make sure the index is a valid number corresponding to an assignment in your specified course."));
         } else {
             console.log(e);
         }

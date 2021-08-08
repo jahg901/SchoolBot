@@ -9,10 +9,14 @@ const reactionFilter = (reaction, user) => {
 }
 
 const sendEmbed = (member, msg, pageNum, courses) => {
-    const e = new Discord.MessageEmbed().setTitle(member.nickname);
-    if (member.nickname === null) e.setTitle(member.user.tag);
-    e.setDescription(courses.length + " Course" + Funcs.pluralize(courses.length));
-
+    const e = new Discord.MessageEmbed()
+        .setColor("#0088ff")
+        .setDescription(courses.length + " Course" + Funcs.pluralize(courses.length));
+    if (msg.member.nickname === null) {
+        e.setTitle(msg.author.tag);
+    } else {
+        e.setTitle(msg.member.nickname);
+    }
     for (let i = pageNum * 10; i < courses.length && i < (pageNum + 1) * 10; i++) {
         e.addField(courses[i].name, courses[i].assignments.length + " Assignment" + Funcs.pluralize(courses[i].assignments.length)
             + " | " + courses[i].studentArr.length + " Student" + Funcs.pluralize(courses[i].studentArr.length));
@@ -43,17 +47,20 @@ const MyCourseList = new Command(".myCourseList", "lists all courses", false, []
         }
     }
     if (myCourses.length === 0) {
-        throw new Error("No courses");
+        msg.channel.send(new Discord.MessageEmbed()
+            .setColor("0088ff")
+            .setTitle("You are not enrolled in any courses."));
     } else {
         msg.channel.send(new Discord.MessageEmbed().setDescription("Loading...")).then(sentMsg => {
             sendEmbed(msg.member, sentMsg, 0, myCourses);
         });
     }
 }, (msg, e) => {
-    if (e.message === "No courses") {
-        msg.channel.send(new Discord.MessageEmbed().setDescription("You are not enrolled in any courses."));
-    } else if (e.message === "Too many arguments") {
-        msg.channel.send(new Discord.MessageEmbed().setDescription(`Invalid input: the command ".fullCourseList" takes no arguments.`))
+    if (e.message === "Too many arguments") {
+        msg.channel.send(new Discord.MessageEmbed()
+            .setColor("#ff0000")
+            .setTitle("Invalid input.")
+            .setDescription(`The command ".fullCourseList" takes no arguments.`))
     } else {
         console.log(e);
     }

@@ -46,7 +46,9 @@ const EditAssignment = new Command(".editAssignment\n", "edit an assignment's in
                     throw new Error("Invalid index")
                 } else {
                     const assignment = edit(args.field, args.content, crs.assignments[args.index - 1], server, client);
-                    msg.channel.send(new Discord.MessageEmbed().setTitle("Assignment edited! " + assignment.name)
+                    msg.channel.send(new Discord.MessageEmbed()
+                        .setColor("#00ff00")
+                        .setTitle("Assignment edited! " + assignment.name)
                         .setDescription(assignment.info)
                         .addFields(
                             { name: 'Course: ', value: assignment.course, inline: true },
@@ -58,23 +60,36 @@ const EditAssignment = new Command(".editAssignment\n", "edit an assignment's in
     }, (msg, e) => {
         if (e.message === "Too many arguments" || e.message === "Too few arguments") {
             msg.channel.send(new Discord.MessageEmbed()
-                .setDescription("Invalid input. Please format your command in the following manner:" +
+                .setColor("#ff0000")
+                .setTitle("Invalid input.")
+                .setDescription("Please format your command in the following manner:" +
                     `\n\n.editAssignment\n<course name>\n<index>\n<field to edit>\n<new content>` +
                     `\n\nThe index of your assignment can be found by using the command ".assignmentList <course>".` +
                     `\n\nThe field to edit should be either "name", "duedate", or "info".`));
         } else if (e.message.startsWith("Invalid course")) {
-            msg.channel.send(new Discord.MessageEmbed().setDescription(`The course "${e.message.substring("Invalid course".length)}" does not exist.`));
+            msg.channel.send(new Discord.MessageEmbed()
+                .setColor("#ff0000")
+                .setTitle(`The course "${e.message.substring(14)}" does not exist.`));
         } else if (e.message.startsWith("Invalid index")) {
-            msg.channel.send(new Discord.MessageEmbed().setDescription(`Invalid index. Please make sure the index is a `
-                + `valid number corresponding to an assignment in your specified course.`));
+            msg.channel.send(new Discord.MessageEmbed()
+                .setColor("#ff0000")
+                .setTitle("Invalid index.")
+                .setDescription(`Please make sure the index is a valid number corresponding to an assignment in your specified course.`));
         } else if (e.message === "Invalid date") {
-            msg.channel.send(new Discord.MessageEmbed().setDescription("Invalid date. Please provide a valid date in yyyy/mm/dd format."));
+            msg.channel.send(new Discord.MessageEmbed()
+                .setColor("#ff0000")
+                .setTitle("Invalid date.")
+                .setDescription("Please provide a valid date in yyyy/mm/dd format."));
         } else if (e.message === "Date in past") {
-            msg.channel.send(new Discord.MessageEmbed().setDescription("The provided due date is in the past. Please provide a due date in the future."));
+            msg.channel.send(new Discord.MessageEmbed()
+                .setColor("#ff0000")
+                .setTitle("Invalid date.")
+                .setDescription("The provided due date is in the past. Please provide a due date in the future."));
         } else if (e.message === "Invalid field") {
-            msg.channel.send(new Discord.MessageEmbed().setDescription(`Invalid field to edit. The field to edit should be either "name", "duedate", or "info".`))
-        } else if (e.messgae === "Backslash") {
-            msg.channel.send(new Discord.MessageEmbed().setDescription(`No input can include the character "\\\\".`));
+            msg.channel.send(new Discord.MessageEmbed()
+                .setColor("#ff0000")
+                .setTitle("Invalid field to edit.")
+                .setDescription(`The field to edit should be either "name", "duedate", or "info".`));
         } else {
             console.log(e);
         }

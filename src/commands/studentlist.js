@@ -9,7 +9,9 @@ const reactionFilter = (reaction, user) => {
 }
 
 const sendEmbed = (msg, pageNum, crs) => {
-    const e = new Discord.MessageEmbed().setTitle(crs.name)
+    const e = new Discord.MessageEmbed()
+        .setColor("0088ff")
+        .setTitle(crs.name)
         .setDescription(crs.studentArr.length + " Student" + Funcs.pluralize(crs.studentArr.length))
         .addField("\u200B", "\u0000");
     for (let i = pageNum * 10; i < crs.studentArr.length && i < (pageNum + 1) * 10; i++) {
@@ -43,7 +45,9 @@ const CourseStudentList = new Command(".studentList ", "list the students in a c
     if (crs === null) {
         throw new Error("Invalid course" + args.course);
     } else if (crs.studentArr.length === 0) {
-        throw new Error("No students" + args.course);
+        msg.channel.send(new Discord.MessageEmbed()
+            .setColor("0088ff")
+            .setTitle(`The course ${args.course} has no students.`));
     } else {
         msg.guild.members.fetch();
         msg.channel.send(new Discord.MessageEmbed().setDescription("Loading...")).then(sentMsg => {
@@ -52,11 +56,9 @@ const CourseStudentList = new Command(".studentList ", "list the students in a c
     }
 }, (msg, e) => {
     if (e.message.startsWith("Invalid course")) {
-        msg.channel.send(new Discord.MessageEmbed().setDescription(`The course "${e.message.substring("Invalid course".length)}" does not exist.`));
-    } else if (e.message.startsWith("No students")) {
-        msg.channel.send(new Discord.MessageEmbed().setDescription(`The course ${e.message.substring("No students".length)} has no students.`));
-    } else if (e.message === "Backslash") {
-        msg.channel.send(new Discord.MessageEmbed().setDescription(`No input can include the character "\\\\".`));
+        msg.channel.send(new Discord.MessageEmbed()
+            .setColor("ff0000")
+            .setTitle(`The course "${e.message.substring(14)}" does not exist.`));
     } else {
         console.log(e);
     }

@@ -1,9 +1,7 @@
 const { MessageEmbed } = require("discord.js");
 
 function parseArgs(content, params, splitter) { //interprets a user's command and outputs a JSON of arguments
-    if (content.includes("\\")) {
-        throw new Error("Backslash");
-    }
+    content = content.replace(/\\/g, "");
     let args = content.split(splitter);
     if (args[0] === "") {
         args.splice(0, 1);
@@ -42,7 +40,10 @@ class Command { //framework for discord commands
                     if (mod === false || server.modRole === null || msg.member.roles.cache.has(server.modRole)) {
                         execution(msg, server, parseArgs(msg.content.substring(name.length), params, splitter), client);
                     } else {
-                        msg.channel.send(new MessageEmbed().setTitle("Sorry, you do not have permission to perform that command."));
+                        msg.channel.send(new MessageEmbed()
+                            .setColor("ff0000")
+                            .setTitle("Command prohibited.")
+                            .setDescription("Sorry, you do not have permission to perform that command."));
                     }
                 } catch (e) {
                     errorHandle(msg, e);

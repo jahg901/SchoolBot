@@ -10,6 +10,7 @@ const reactionFilter = (reaction, user) => {
 
 const sendEmbed = (msg, pageNum, crs) => {
     const e = new Discord.MessageEmbed().setTitle(crs.name)
+        .setColor("#0088ff")
         .setDescription(crs.assignments.length + " Assignment" + Funcs.pluralize(crs.assignments.length));
     for (let i = pageNum * 10; i < crs.assignments.length && i < (pageNum + 1) * 10; i++) {
         e.addField(`${i + 1}. ${crs.assignments[i].name}`, `Due ${Funcs.dateFormat.format(crs.assignments[i].dueDate)}`);
@@ -37,7 +38,9 @@ const CourseAssignmentList = new Command(".assignmentList ", "list the assignmen
     if (crs === null) {
         throw new Error("Invalid course" + args.course);
     } else if (crs.assignments.length === 0) {
-        throw new Error("No assignments" + args.course);
+        msg.channel.send(new Discord.MessageEmbed()
+            .setColor("#0088ff")
+            .setTitle(`The course ${args.course} has no assignments.`));
     } else {
         crs.assignments.sort((a, b) => (a.dueDate > b.dueDate) ? 1 : -1);
         msg.channel.send(new Discord.MessageEmbed().setDescription("Loading...")).then(sentMsg => {
@@ -46,11 +49,9 @@ const CourseAssignmentList = new Command(".assignmentList ", "list the assignmen
     }
 }, (msg, e) => {
     if (e.message.startsWith("Invalid course")) {
-        msg.channel.send(new Discord.MessageEmbed().setDescription(`The course "${e.message.substring("Invalid course".length)}" does not exist.`));
-    } else if (e.message.startsWith("No assignments")) {
-        msg.channel.send(new Discord.MessageEmbed().setDescription(`The course ${e.message.substring("No assignments".length)} has no assignments.`));
-    } else if (e.message === "Backslash") {
-        msg.channel.send(new Discord.MessageEmbed().setDescription(`No input can include the character "\\\\".`));
+        msg.channel.send(new Discord.MessageEmbed()
+            .setColor("#ff0000")
+            .setTitle(`The course "${e.message.substring(14)}" does not exist.`));
     } else {
         console.log(e);
     }
