@@ -41,9 +41,13 @@ client.on("ready", () => {
 });
 
 client.on("guildCreate", guild => {
+    let channelFound = false;
     guild.channels.cache.map(channel => {
-        if (channel.type === "text" && channel.permissionsFor(client.user).has("VIEW_CHANNEL", "SEND_MESSAGES")) {
-            channel.send(WelcomeMessage);
+        if (!channelFound) {
+            if (channel.type === "text" && channel.permissionsFor(client.user).has("VIEW_CHANNEL", "SEND_MESSAGES")) {
+                channel.send(WelcomeMessage);
+                channelFound = true;
+            }
         }
     })
 });

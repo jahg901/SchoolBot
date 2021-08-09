@@ -25,7 +25,7 @@ const NewAssignment = new Command(".newAssignment\n",
             } else {
                 crs.assignments.push(new Classes.Assignment(args.name, args.course, args.dueDate, args.info, server, client));
                 msg.channel.send(new Discord.MessageEmbed()
-                    .setColor(Funcs.Colors.confirmation)
+                    .setColor(Funcs.Colors.success)
                     .setTitle("New assignment created! " + args.name).setDescription(args.info)
                     .addFields(
                         { name: "Course: ", value: args.course, inline: true },

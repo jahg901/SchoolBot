@@ -13,7 +13,10 @@ const NewCourse = new Command(".newCourse ", "create a new course in your server
         throw new Error("Already exists");
     } else {
         server.courses.push(new Classes.Course(args.name));
-        msg.channel.send(new Discord.MessageEmbed().setTitle("New Course Created!").setDescription(args.name));
+        msg.channel.send(new Discord.MessageEmbed()
+	.setColor(Funcs.Colors.success)
+	.setTitle("New Course Created!")
+	.setDescription(args.name));
     }
 }, (msg, e) => {
     if (e.message === "Line Break") {
